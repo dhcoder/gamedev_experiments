@@ -1,0 +1,3 @@
+rootProject.name = 'playground'
+include 'dhcoder.test', 'dhcoder.support', 'dhcoder.libgdx', 'dhcoder.sandbox:core', 'dhcoder.sandbox:desktop', 'dhcoder.sandbox:android'
+
