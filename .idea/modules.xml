@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dhcoder.sandbox/android/android.iml" filepath="$PROJECT_DIR$/dhcoder.sandbox/android/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dhcoder.sandbox/core/core.iml" filepath="$PROJECT_DIR$/dhcoder.sandbox/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dhcoder.sandbox/desktop/desktop.iml" filepath="$PROJECT_DIR$/dhcoder.sandbox/desktop/desktop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dhcoder.libgdx/dhcoder.libgdx.iml" filepath="$PROJECT_DIR$/dhcoder.libgdx/dhcoder.libgdx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dhcoder.sandbox/dhcoder.sandbox.iml" filepath="$PROJECT_DIR$/dhcoder.sandbox/dhcoder.sandbox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dhcoder.support/dhcoder.support.iml" filepath="$PROJECT_DIR$/dhcoder.support/dhcoder.support.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dhcoder.test/dhcoder.test.iml" filepath="$PROJECT_DIR$/dhcoder.test/dhcoder.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/root.iml" filepath="$PROJECT_DIR$/root.iml" />
+    </modules>
+  </component>
+</project>
