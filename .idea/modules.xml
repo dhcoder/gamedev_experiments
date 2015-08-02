@@ -9,7 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/dhcoder.sandbox/dhcoder.sandbox.iml" filepath="$PROJECT_DIR$/dhcoder.sandbox/dhcoder.sandbox.iml" />
       <module fileurl="file://$PROJECT_DIR$/dhcoder.support/dhcoder.support.iml" filepath="$PROJECT_DIR$/dhcoder.support/dhcoder.support.iml" />
       <module fileurl="file://$PROJECT_DIR$/dhcoder.test/dhcoder.test.iml" filepath="$PROJECT_DIR$/dhcoder.test/dhcoder.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/root.iml" filepath="$PROJECT_DIR$/root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gamedev_experiments.iml" filepath="$PROJECT_DIR$/gamedev_experiments.iml" />
     </modules>
   </component>
 </project>

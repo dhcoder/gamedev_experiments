@@ -15,10 +15,10 @@ repositories {
 }
 
 dependencies {
-    compile project(':dhcoder.support')
+    compile "dhcoder:dhcoder.support:+"
     compile 'com.badlogicgames.gdx:gdx:+'
     compile 'com.badlogicgames.gdx:gdx-box2d:+'
-    testCompile project(':dhcoder.test')
+    testCompile "dhcoder:dhcoder.test:+"
     testCompile 'junit:junit:4.+'
     testCompile 'org.hamcrest:hamcrest-core:1.3+'
 }
