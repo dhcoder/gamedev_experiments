@@ -25,9 +25,12 @@ public final class VirtualThumbstick {
         myRadius2 = myRadius * myRadius;
     }
 
-    public
+    public boolean isPressed() {
+        return myStarted;
+    }
+
     @NotNull
-    Vector2 getPosition() {
+    public Vector2 getPosition() {
         if (!myStarted) {
             throw new IllegalStateException("getPosition called without calling  begin() first");
         }
@@ -35,9 +38,8 @@ public final class VirtualThumbstick {
         return myStart;
     }
 
-    public
     @NotNull
-    Vector2 getDrag() {
+    public Vector2 getDrag() {
         if (!myStarted) {
             throw new IllegalStateException("getDrag called without calling begin() first");
         }
@@ -51,6 +53,8 @@ public final class VirtualThumbstick {
         }
 
         myStart.set(position);
+        myCurr.set(myStart);
+        myDrag.setZero();
         myStarted = true;
     }
 

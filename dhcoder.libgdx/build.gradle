@@ -20,7 +20,7 @@ dependencies {
     compile 'com.badlogicgames.gdx:gdx-box2d:+'
     testCompile "dhcoder:dhcoder.test:+"
     testCompile 'junit:junit:4.+'
-    testCompile 'org.hamcrest:hamcrest-core:1.3+'
+    testCompile 'com.google.truth:truth:+'
 }
 
 sourceSets.main.java.srcDirs = ["src/"]
