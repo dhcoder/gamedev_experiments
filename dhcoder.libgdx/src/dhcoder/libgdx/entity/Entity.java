@@ -13,7 +13,7 @@ import static dhcoder.support.text.StringUtils.format;
  * A skeletal game object whose behavior is implemented by {@link Component}s.
  * <p/>
  * Allocate an entity and its components through a manager, using {@link EntityManager#newEntity()},
- * {@link EntityManager#newEntityFromTemplate(Enum)}, and {@link EntityManager#newComponent(Class)}. You can then
+ * {@link EntityManager#newEntityFromTemplate(Enum)}, or {@link EntityManager#newComponent(Class)}. You can then
  * free an entity and its components by calling {@link EntityManager#freeEntity(Entity)}.
  */
 public final class Entity implements Poolable {

@@ -17,7 +17,7 @@ import static dhcoder.support.text.StringUtils.format;
  */
 public final class EntityManager {
 
-    public static interface EntityCreator {
+    public interface EntityCreator {
         void initialize(Entity entity);
     }
 
@@ -47,6 +47,12 @@ public final class EntityManager {
         templates = new ArrayMap<IntKey, EntityCreator>();
     }
 
+    /**
+     * Register an ID with a function that creates an {@link Entity}. This can later be used to
+     * create an entity with {@link #newEntityFromTemplate(Enum)}. Note that the enum ID can be any
+     * enumeration value; it is recommended you create a local {@link Enum} somewhere in your
+     * project that represents all entities and use it consistently.
+     */
     public void registerTemplate(final Enum id, final EntityCreator entityCreator) {
         Opt<EntityCreator> entityCreatorOpt = optPool.grabNew();
         getEntityCreator(id, entityCreatorOpt);
@@ -58,6 +64,9 @@ public final class EntityManager {
         templates.put(new IntKey(id.ordinal()), entityCreator);
     }
 
+    /**
+     * Create a new entity based on a template registered with {@link #registerTemplate(Enum, EntityCreator)}.
+     */
     public Entity newEntityFromTemplate(final Enum id) {
         Opt<EntityCreator> entityCreatorOpt = optPool.grabNew();
         getEntityCreator(id, entityCreatorOpt);
