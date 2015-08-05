@@ -15,31 +15,31 @@ public final class HeapPool<T> {
 
     public static final int DEFAULT_CAPACITY = 200; // HeapPools should be relatively large
 
-    public static <P extends Poolable> HeapPool<P> of(final Class<P> poolableClass) {
+    public static <P extends Poolable> HeapPool<P> of(Class<P> poolableClass) {
         return new HeapPool<P>(Pool.of(poolableClass, DEFAULT_CAPACITY));
     }
 
-    public static <P extends Poolable> HeapPool<P> of(final Class<P> poolableClass, final int capacity) {
+    public static <P extends Poolable> HeapPool<P> of(Class<P> poolableClass, int capacity) {
         return new HeapPool<P>(Pool.of(poolableClass, capacity));
     }
 
     private final Pool<T> innerPool;
     private final ArrayMap<T, Integer> itemIndices;
 
-    public HeapPool(final Pool.AllocateMethod<T> allocate, final Pool.ResetMethod<T> reset) {
+    public HeapPool(Pool.AllocateMethod<T> allocate, Pool.ResetMethod<T> reset) {
         this(new Pool(allocate, reset));
     }
 
-    public HeapPool(final Pool.AllocateMethod<T> allocate, final Pool.ResetMethod<T> reset, final int capacity) {
+    public HeapPool(Pool.AllocateMethod<T> allocate, Pool.ResetMethod<T> reset, int capacity) {
         this(new Pool(allocate, reset, capacity));
     }
 
-    private HeapPool(final Pool<T> innerPool) {
+    private HeapPool(Pool<T> innerPool) {
         this.innerPool = innerPool;
         itemIndices = new ArrayMap<T, Integer>(innerPool.getCapacity());
     }
 
-    public HeapPool makeResizable(final int maxCapacity) {
+    public HeapPool makeResizable(int maxCapacity) {
         innerPool.makeResizable(maxCapacity);
         return this;
     }
@@ -60,12 +60,12 @@ public final class HeapPool<T> {
         return item;
     }
 
-    public void free(final T item) {
+    public void free(T item) {
         int index = itemIndices.get(item).intValue();
         innerPool.free(index);
 
         itemIndices.remove(item);
-        final List<T> items = getItemsInUse();
+        List<T> items = getItemsInUse();
         if (items.size() > index) {
             T movedItem = items.get(index); // An old item was moved to fill in the place of the removed item
             itemIndices.replace(movedItem, IntegerCache.getFor(index));

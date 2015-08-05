@@ -31,10 +31,10 @@ public final class TilesLoader {
         public int[][] coords;
     }
 
-    public static void load(final Json json, final TilesetDatastore tilesets, final TileDatastore tiles,
-        final String jsonPath) {
+    public static void load(Json json, TilesetDatastore tilesets, TileDatastore tiles,
+                            String jsonPath) {
 
-        final FileHandle fileHandle = Gdx.files.internal(jsonPath);
+        FileHandle fileHandle = Gdx.files.internal(jsonPath);
         TileGroupData groupData = json.fromJson(TileGroupData.class, fileHandle.readString());
 
         Tileset tileset = tilesets.get(groupData.tilesetPath);

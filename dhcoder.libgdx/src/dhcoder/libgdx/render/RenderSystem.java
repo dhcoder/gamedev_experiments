@@ -24,7 +24,7 @@ public final class RenderSystem {
             return isActive;
         }
 
-        public void setActive(final boolean isActive) {
+        public void setActive(boolean isActive) {
             this.isActive = isActive;
         }
 
@@ -32,7 +32,7 @@ public final class RenderSystem {
         private boolean isSorted;
         private boolean isUiLayer;
 
-        public Layer(final int capacity) {
+        public Layer(int capacity) {
             renderables = new Array<Renderable>(capacity);
             useBlending = true;
             isActive = true;
@@ -43,7 +43,7 @@ public final class RenderSystem {
          * Set whether this layer should be sorted before rendering. Sprites will be sorted by z-order in this case.
          * Defaults to {@code true}.
          */
-        public Layer setSorted(final boolean isSorted) {
+        public Layer setSorted(boolean isSorted) {
             this.isSorted = isSorted;
             return this;
         }
@@ -53,7 +53,7 @@ public final class RenderSystem {
          * always renders to an absolute position regardless of how much the game world has translated. Defaults to
          * {@code false}.
          */
-        public Layer setUiLayer(final boolean isUiLayer) {
+        public Layer setUiLayer(boolean isUiLayer) {
             this.isUiLayer = isUiLayer;
             return this;
         }
@@ -62,16 +62,16 @@ public final class RenderSystem {
          * Set whether this layer supports blending. If you know all objects in this layer are opaque, you should set
          * this {@code false} and it may improve performance. Defaults to {@code true}.
          */
-        public Layer setBlending(final boolean useBlending) {
+        public Layer setBlending(boolean useBlending) {
             this.useBlending = useBlending;
             return this;
         }
 
-        void add(final Renderable renderable) {
+        void add(Renderable renderable) {
             renderables.add(renderable);
         }
 
-        void remove(final Renderable renderable) {
+        void remove(Renderable renderable) {
             renderables.removeValue(renderable, true);
         }
 
@@ -90,7 +90,7 @@ public final class RenderSystem {
                 spriteBatch.enableBlending();
             }
 
-            final Camera activeCamera = isUiLayer ? uiCamera : worldCamera;
+            Camera activeCamera = isUiLayer ? uiCamera : worldCamera;
             spriteBatch.setProjectionMatrix(activeCamera.combined);
 
             spriteBatch.begin();
@@ -110,7 +110,7 @@ public final class RenderSystem {
 
     private static final Comparator<Renderable> Z_SORT = new Comparator<Renderable>() {
         @Override
-        public int compare(final Renderable r1, final Renderable r2) {
+        public int compare(Renderable r1, Renderable r2) {
             return Float.compare(r1.getZ(), r2.getZ());
         }
     };
@@ -120,7 +120,7 @@ public final class RenderSystem {
     private final Array<Layer> renderLayers;
     private boolean cameraNeedsUpdate;
 
-    public RenderSystem(final float viewportWidth, final float viewportHeight, final int batchSize) {
+    public RenderSystem(float viewportWidth, float viewportHeight, int batchSize) {
         spriteBatch = new SpriteBatch(batchSize);
         worldCamera = new OrthographicCamera(viewportWidth, viewportHeight);
         uiCamera = new OrthographicCamera(viewportWidth, viewportHeight);
@@ -135,7 +135,7 @@ public final class RenderSystem {
         return worldCamera;
     }
 
-    public Layer addLayer(final int capacity) {
+    public Layer addLayer(int capacity) {
         Layer layer = new Layer(capacity);
         renderLayers.add(layer);
         return layer;
@@ -144,21 +144,21 @@ public final class RenderSystem {
     /**
      * Add a renderable which will get drawn by {@link #render}
      */
-    public void add(final Enum layer, final Renderable renderable) {
+    public void add(Enum layer, Renderable renderable) {
         renderLayers.get(layer.ordinal()).add(renderable);
     }
 
     /**
      * Remove a renderable added by {@link #add(Enum, Renderable)}
      */
-    public void remove(final Enum layer, final Renderable renderable) {
+    public void remove(Enum layer, Renderable renderable) {
         renderLayers.get(layer.ordinal()).remove(renderable);
     }
 
     /**
      * Offset the world camera, shifting any non-UI layer.
      */
-    public void setOffset(final Vector2 offset) {
+    public void setOffset(Vector2 offset) {
         if (!worldCamera.position.epsilonEquals(offset.x, offset.y, 0f, 0f)) {
             worldCamera.position.set(offset, 0f);
             cameraNeedsUpdate = true;

@@ -1,6 +1,6 @@
 package dhcoder.support.state;
 
-import dhcoder.support.opt.Opt;
+import dhcoder.support.annotations.Nullable;
 
 /**
  * A method like {@link StateTransitionHandler} but doesn't return a state to transition into.
@@ -9,5 +9,5 @@ import dhcoder.support.opt.Opt;
  * @param <E> An enumeration type that represents the known events this machine can accept.
  */
 public interface StateEventHandler<S extends Enum, E extends Enum> {
-    void run(S fromState, E withEvent, Opt eventData);
+    void run(S fromState, E withEvent, @Nullable Object eventData);
 }

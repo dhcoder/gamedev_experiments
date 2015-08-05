@@ -54,14 +54,14 @@ public enum CompassDirection {
         return CACHED[RANDOM.nextInt(CACHED.length)];
     }
 
-    public static CompassDirection getForAngle(final Angle angle) {
+    public static CompassDirection getForAngle(Angle angle) {
         int regionIndex = (int)(angle.getDegrees() / 22.5f);
         return REGIONS[regionIndex];
     }
 
-    public boolean isFacing(final Angle angle, final Angle epsilon) {
-        Angle angleMin = anglePool.grabNew().setFrom(angle).sub(epsilon);
-        Angle angleMax = anglePool.grabNew().setFrom(angle).add(epsilon);
+    public boolean isFacing(Angle angle, Angle epsilon) {
+        Angle angleMin = anglePool.grabNew().set(angle).sub(epsilon);
+        Angle angleMax = anglePool.grabNew().set(angle).add(epsilon);
         boolean isFacing =
             (getForAngle(angleMin) == this || getForAngle(angleMax) == this || getForAngle(angle) == this);
 
@@ -70,7 +70,7 @@ public enum CompassDirection {
         return isFacing;
     }
 
-    public boolean isFacing(final Angle angle) {
+    public boolean isFacing(Angle angle) {
         return getForAngle(angle) == this;
     }
 

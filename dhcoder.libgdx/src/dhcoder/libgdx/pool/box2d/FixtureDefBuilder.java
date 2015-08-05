@@ -8,7 +8,7 @@ import dhcoder.support.memory.Pool;
  */
 public final class FixtureDefBuilder {
 
-    public static Pool<FixtureDef> build(final int capacity) {
+    public static Pool<FixtureDef> build(int capacity) {
         return new Pool<FixtureDef>(new Pool.AllocateMethod<FixtureDef>() {
             @Override
             public FixtureDef run() {
@@ -16,7 +16,7 @@ public final class FixtureDefBuilder {
             }
         }, new Pool.ResetMethod<FixtureDef>() {
             @Override
-            public void run(final FixtureDef fixtureDef) {
+            public void run(FixtureDef fixtureDef) {
                 fixtureDef.shape = null;
                 fixtureDef.friction = 0.2f;
                 fixtureDef.restitution = 0;

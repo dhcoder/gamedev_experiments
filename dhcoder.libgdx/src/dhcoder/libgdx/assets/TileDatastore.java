@@ -10,7 +10,7 @@ public final class TileDatastore extends AssetGroup<TileGroup> {
     /**
      * Convenience method to grab a tile out from a subgroup directly.
      */
-    public TextureRegion get(final String group, final String name) {
+    public TextureRegion get(String group, String name) {
         return get(group).get(name);
     }
 }

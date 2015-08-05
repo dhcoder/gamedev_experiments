@@ -9,10 +9,10 @@ import dhcoder.support.time.Duration;
 public abstract class AbstractComponent implements Component {
 
     @Override
-    public void initialize(final Entity owner) {}
+    public void initialize(Entity owner) {}
 
     @Override
-    public void update(final Duration elapsedTime) {}
+    public void update(Duration elapsedTime) {}
 
     @Override
     public void reset() {}

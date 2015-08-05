@@ -52,28 +52,27 @@ This project is meant to be modified using IntelliJ IDEA, as its project setting
 There are some additional rules followed by this codebase...
 
 
-* ~~[Never use nulls](https://code.google.com/p/guava-libraries/wiki/UsingAndAvoidingNullExplained). Instead, use `Opt`.~~
-    * *UPDATE*: This advice is obsolete. Use @Nullable and @NotNull (in dhcoder.support.annoations) instead. Thanks to IntelliJ tool support, you enjoy the same benefits as Opt without the need to allocate an extra object. In a future change I'll remove Opt.
+* Assume all parameters and return values are non-null UNLESS `@Nullable` indicates otherwise.
+* IntelliJ tool support helps verify this. Marking fields and method signatures with `@Nullable` is required (and explaining what null means in a comment is ideal).
+    * `@NotNull` is optional as that's assumed to be the default case, but you can add it if you want to to
+be explicit in your API design.
+    * `@Nullable` and `@NotNull` can be found in dhcoder.support.annotations.
 * Prefer composition over inheritance. Really, avoid inheritance. 
-    * An abstract base class is OK to provide default implementations of interface methods or allow base methods to be
-    protected instead of public like they are in an interface, but no matter what, you should never use `super` except
-    in constructors. Having to rely on `super` to do magical things behind your back is a way towards codebase
+    * An abstract base class is OK to provide default implementations of interface methods or allow base methods to be protected instead of public like they are in an interface, but no matter what, you should never use `super` except in constructors. Having to rely on `super` to do magical things behind your back is a way towards codebase
     fragility.
+    * Classes should be final when possible. When not, all methods should be final when possible.
 * Values returned from getXXX methods should be treated as immutable. Values passed in as parameters should also be
 treated as immutable.
-    * If I wasn't worried about performance and unnecessary allocations, I would just have made immutable versions of
-    each class, but alas, we need to sacrifice safety for a more responsive program.
+    * If I wasn't worried about performance and unnecessary allocations, I would just have made immutable versions of each class, but alas, we need to sacrifice safety for a more responsive program.
 * Fields should never be public. Access them through a getXXX or setXXX method if you need to change their values.
     * Following this rule makes it easier to know I can just modify a single setXXX method and that it will work
     everywhere.
 * Avoid all allocations that I have any control over while the user can control the player.
     * This appeases the android GC from nibbling away at your game performance.
-    * **Run Android monitor and track allocations**
+    * **Run Android monitor and track allocations** (this is slowly being integrated into IntelliJ)
     * Use Pools
-    * Avoid `StringUtils.format` in code paths that get called a lot (this does a couple of minor allocations under the
-      hood.
-    * Consider triggering the GC while the game is transitioning, say, from one room to another, etc., where a drop in
-      frame rate is less noticeable.
+    * Avoid `StringUtils.format` in code paths that get called a lot (this does a couple of minor allocations under the hood.
+    * Consider triggering the GC while the game is transitioning, say, from one room to another, etc., where a drop in frame rate is less noticeable.
 
 ## On the fence
 

@@ -17,7 +17,7 @@ public final class EntityTest {
         }
 
         @Override
-        public void initialize(final Entity owner) {
+        public void initialize(Entity owner) {
             this.owner = owner;
         }
     }
@@ -39,7 +39,7 @@ public final class EntityTest {
         }
 
         @Override
-        public void initialize(final Entity owner) {
+        public void initialize(Entity owner) {
             sourceComponent = owner.requireComponent(SourceComponent.class);
         }
     }

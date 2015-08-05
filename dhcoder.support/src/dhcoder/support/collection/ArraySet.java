@@ -13,7 +13,7 @@ public final class ArraySet<E> {
 
     public ArraySet() { internalMap = new ArrayMap<E, Object>(); }
 
-    public ArraySet(final int expectedSize) { internalMap = new ArrayMap<E, Object>(expectedSize); }
+    public ArraySet(int expectedSize) { internalMap = new ArrayMap<E, Object>(expectedSize); }
 
     /**
      * Create a set with an expected size and load factor. The load factor dictates how full a hashtable should get
@@ -21,7 +21,7 @@ public final class ArraySet<E> {
      *
      * @throws IllegalArgumentException if the input load factor is not between 0 and 1.
      */
-    public ArraySet(final int expectedSize, final float loadFactor) {
+    public ArraySet(int expectedSize, float loadFactor) {
         internalMap = new ArrayMap<E, Object>(expectedSize, loadFactor);
     }
 
@@ -36,20 +36,20 @@ public final class ArraySet<E> {
 
     public boolean isEmpty() { return internalMap.isEmpty(); }
 
-    public boolean contains(final E element) { return internalMap.containsKey(element); }
+    public boolean contains(E element) { return internalMap.containsKey(element); }
 
     /**
      * Add the element, which must NOT exist in the set. Use {@link #putIf(Object)} if you don't need this
      * requirement.
      */
-    public void put(final E element) { internalMap.put(element, DUMMY_OJBECT); }
+    public void put(E element) { internalMap.put(element, DUMMY_OJBECT); }
 
     /**
      * Add the element, if it's not already in the set.
      *
      * @return {@code true} if the element was only just now added into the set.
      */
-    public boolean putIf(final E element) {
+    public boolean putIf(E element) {
         return internalMap.putOrReplace(element, DUMMY_OJBECT) == ArrayMap.InsertMethod.PUT;
     }
 
@@ -58,7 +58,7 @@ public final class ArraySet<E> {
      * requirement. This distinction can be useful to assert cases when you want to guarantee the element is in the set,
      * and it also better mimics the related {@link ArrayMap} class.
      */
-    public void remove(final E element) { internalMap.remove(element); }
+    public void remove(E element) { internalMap.remove(element); }
 
     /**
      * Remove the element, which may or may not exist in the set. Use {@link #remove(Object)} if you want to assert
@@ -66,7 +66,7 @@ public final class ArraySet<E> {
      *
      * @return {@code true} if the element was in the set.
      */
-    public boolean removeIf(final E element) { return internalMap.removeIf(element); }
+    public boolean removeIf(E element) { return internalMap.removeIf(element); }
 
     public void clear() { internalMap.clear(); }
 }

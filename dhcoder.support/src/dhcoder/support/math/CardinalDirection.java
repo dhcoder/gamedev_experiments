@@ -42,14 +42,14 @@ public enum CardinalDirection {
         return CACHED[RANDOM.nextInt(CACHED.length)];
     }
 
-    public static CardinalDirection getForAngle(final Angle angle) {
+    public static CardinalDirection getForAngle(Angle angle) {
         int regionIndex = (int)(angle.getDegrees() / 45f);
         return REGIONS[regionIndex];
     }
 
-    public boolean isFacing(final Angle angle, final Angle epsilon) {
-        Angle angleMin = anglePool.grabNew().setFrom(angle).sub(epsilon);
-        Angle angleMax = anglePool.grabNew().setFrom(angle).add(epsilon);
+    public boolean isFacing(Angle angle, Angle epsilon) {
+        Angle angleMin = anglePool.grabNew().set(angle).sub(epsilon);
+        Angle angleMax = anglePool.grabNew().set(angle).add(epsilon);
         boolean isFacing =
             (getForAngle(angleMin) == this || getForAngle(angleMax) == this || getForAngle(angle) == this);
 
@@ -58,7 +58,7 @@ public enum CardinalDirection {
         return isFacing;
     }
 
-    public boolean isFacing(final Angle angle) {
+    public boolean isFacing(Angle angle) {
         return getForAngle(angle) == this;
     }
 

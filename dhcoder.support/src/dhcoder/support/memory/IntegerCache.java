@@ -3,7 +3,7 @@ package dhcoder.support.memory;
 import java.util.ArrayList;
 
 /**
- * TODO: HEADER COMMENT HERE.
+ * Class which preallocates Integers so you can avoid extra allocations if you otherwise need to box an int.
  */
 public final class IntegerCache {
 
@@ -18,8 +18,8 @@ public final class IntegerCache {
         }
     }
 
-    public static Integer getFor(final int index) {
-        final int numIndices = PREALLOCATED_INDICES.size();
+    public static Integer getFor(int index) {
+        int numIndices = PREALLOCATED_INDICES.size();
         if (numIndices < index) {
             PREALLOCATED_INDICES.ensureCapacity(index);
             for (int i = numIndices; i < index; i++) {

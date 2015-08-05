@@ -16,12 +16,12 @@ public final class Event<T> {
     /**
      * Add a listener to this event, a callback which will get triggered when the event happens.
      */
-    public void addListener(final EventListener<T> eventListener) { listeners.add(eventListener); }
+    public void addListener(EventListener<T> eventListener) { listeners.add(eventListener); }
 
     /**
      * Remove a listener added by {@link #addListener(EventListener)}.
      */
-    public void removeListener(final EventListener<T> eventListener) { listeners.remove(eventListener); }
+    public void removeListener(EventListener<T> eventListener) { listeners.remove(eventListener); }
 
     /**
      * Returns true if this event has any listeners attached. This may be useful to check before firing the event.
@@ -31,7 +31,7 @@ public final class Event<T> {
     /**
      * Fire this event, triggering all listeners.
      */
-    public void fire(final T sender) {
+    public void fire(T sender) {
         int listenerCount = listeners.size(); // Simple iteration to avoid Iterator allocation
         for (int i = 0; i < listenerCount; ++i) {
             listeners.get(i).run(sender);

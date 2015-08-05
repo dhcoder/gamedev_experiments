@@ -5,14 +5,15 @@ import dhcoder.support.memory.Poolable;
 import static dhcoder.support.text.StringUtils.format;
 
 /**
- * Special-case {@link Opt} for the float primitive type (to avoid the allocation that comes from auto-boxing Floats)
+ * A class which represents a {@code Nullable Float} but without the allocation overhead that comes
+ * from auto-boxing Floats).
  */
 public final class OptFloat implements Poolable {
 
     /**
      * Creates an Opt wrapper around a float value.
      */
-    public static OptFloat of(final float value) {
+    public static OptFloat of(float value) {
         return new OptFloat(value);
     }
 
@@ -38,7 +39,7 @@ public final class OptFloat implements Poolable {
      * <p/>
      * Use {@link #of(float)} instead.
      */
-    private OptFloat(final float value) { set(value); }
+    private OptFloat(float value) { set(value); }
 
     /**
      * Clears the value of this optional.
@@ -64,14 +65,14 @@ public final class OptFloat implements Poolable {
     /**
      * Returns the current value of this optional or the specified default value if this optional has no value.
      */
-    public float getValueOr(final float defaultValue) {
+    public float getValueOr(float defaultValue) {
         return (hasValue ? value : defaultValue);
     }
 
     /**
      * Sets this optional to a new value.
      */
-    public void set(final float value) {
+    public void set(float value) {
         this.value = value;
         this.hasValue = true;
     }
@@ -80,7 +81,7 @@ public final class OptFloat implements Poolable {
      * Set the value of this optional to the value held by another optional (or no value if the target optional is also
      * valueless).
      */
-    public void setFrom(final OptFloat rhs) {
+    public void setFrom(OptFloat rhs) {
         this.hasValue = rhs.hasValue;
         this.value = rhs.value;
     }
@@ -105,9 +106,8 @@ public final class OptFloat implements Poolable {
         OptFloat optFloat = (OptFloat)o;
 
         if (hasValue != optFloat.hasValue) { return false; }
-        if (Float.compare(optFloat.value, value) != 0) { return false; }
+        return Float.compare(optFloat.value, value) == 0;
 
-        return true;
     }
 
     @Override

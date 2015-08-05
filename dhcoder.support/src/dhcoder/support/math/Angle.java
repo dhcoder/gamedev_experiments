@@ -44,21 +44,21 @@ public final class Angle implements Poolable {
     private static final float FULL_REVOLUTION_RAD = 2 * PI;
     private static final float FULL_REVOLUTION_DEG = 360f;
 
-    public static Angle fromDegrees(final float degrees) {
+    public static Angle fromDegrees(float degrees) {
         Angle angle = new Angle();
         angle.setDegrees(degrees);
         return angle;
     }
 
-    public static Angle fromRadians(final float radians) {
+    public static Angle fromRadians(float radians) {
         Angle angle = new Angle();
         angle.setRadians(radians);
         return angle;
     }
 
-    public static Angle from(final Angle otherAngle) {
+    public static Angle from(Angle otherAngle) {
         Angle angle = new Angle();
-        angle.setFrom(otherAngle);
+        angle.set(otherAngle);
         return angle;
     }
 
@@ -79,7 +79,7 @@ public final class Angle implements Poolable {
         return degreesOpt.getValue();
     }
 
-    public Angle setDegrees(final float degrees) {
+    public Angle setDegrees(float degrees) {
         float boundedDegrees = degrees % FULL_REVOLUTION_DEG;
         while (boundedDegrees < 0f) {
             boundedDegrees += FULL_REVOLUTION_DEG;
@@ -98,7 +98,7 @@ public final class Angle implements Poolable {
         return radiansOpt.getValue();
     }
 
-    public Angle setRadians(final float radians) {
+    public Angle setRadians(float radians) {
         float boundedRadians = radians % FULL_REVOLUTION_RAD;
         while (boundedRadians < 0f) {
             boundedRadians += FULL_REVOLUTION_RAD;
@@ -110,39 +110,39 @@ public final class Angle implements Poolable {
         return this;
     }
 
-    public Angle setFrom(final Angle rhs) {
+    public Angle set(Angle rhs) {
         degreesOpt.setFrom(rhs.degreesOpt);
         radiansOpt.setFrom(rhs.radiansOpt);
 
         return this;
     }
 
-    public Angle addDegrees(final float degrees) {
+    public Angle addDegrees(float degrees) {
         setDegrees(getDegrees() + degrees);
         return this;
     }
 
-    public Angle addRadians(final float radians) {
+    public Angle addRadians(float radians) {
         setRadians(getRadians() + radians);
         return this;
     }
 
-    public Angle add(final Angle rhs) {
+    public Angle add(Angle rhs) {
         addDegrees(rhs.getDegrees());
         return this;
     }
 
-    public Angle subDegrees(final float degrees) {
+    public Angle subDegrees(float degrees) {
         setDegrees(getDegrees() - degrees);
         return this;
     }
 
-    public Angle subRadians(final float radians) {
+    public Angle subRadians(float radians) {
         setRadians(getRadians() - radians);
         return this;
     }
 
-    public Angle sub(final Angle rhs) {
+    public Angle sub(Angle rhs) {
         subDegrees(rhs.getDegrees());
         return this;
     }

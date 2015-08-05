@@ -9,11 +9,11 @@ public final class BinarySearch {
     private int currentIndex;
     private int acceptedIndex;
 
-    public void initialize(final int maxIndex) {
+    public void initialize(int maxIndex) {
         initialize(0, maxIndex);
     }
 
-    public void initialize(final int minIndex, final int maxIndex) {
+    public void initialize(int minIndex, int maxIndex) {
         this.minIndex = minIndex;
         this.maxIndex = maxIndex;
 
@@ -35,7 +35,7 @@ public final class BinarySearch {
      * Convenience method which, in turn, calls {@link #acceptCurrentIndex()} or {@link #rejectCurrentIndex()}
      * appropriately.
      */
-    public void acceptCurrentIndexIf(final boolean condition) {
+    public void acceptCurrentIndexIf(boolean condition) {
         if (condition) {
             acceptCurrentIndex();
         }

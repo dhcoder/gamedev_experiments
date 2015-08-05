@@ -6,7 +6,7 @@ import dhcoder.support.memory.Poolable;
  * Class which is used to hold an integer value which will be used as a key into a hashtable. Using an IntKey instead
  * of an int directly avoids boxing / unboxing.
  * <p/>
- * Important: This class provides {@link #reset()} and {@link #set(Object, Object)} methods, but this is only for being
+ * Important: This class provides {@link #reset()} and {@link #set(int)} methods, but this is only for being
  * able to pool keys. You absolutely should not modify a key while its in use in a Map somewhere!
  */
 public class IntKey implements Poolable {
@@ -14,11 +14,11 @@ public class IntKey implements Poolable {
 
     public IntKey() {}
 
-    public IntKey(final int value) {
+    public IntKey(int value) {
         set(value);
     }
 
-    public final IntKey set(final int value) {
+    public final IntKey set(int value) {
         this.value = value;
         return this;
     }
@@ -29,15 +29,14 @@ public class IntKey implements Poolable {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
         IntKey intKey = (IntKey)o;
 
-        if (value != intKey.value) { return false; }
+        return value == intKey.value;
 
-        return true;
     }
 
     @Override

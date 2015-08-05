@@ -10,7 +10,7 @@ import dhcoder.support.memory.Pool;
  */
 public final class RevoluteJointDefBuilder {
 
-    public static Pool<RevoluteJointDef> build(final int capacity) {
+    public static Pool<RevoluteJointDef> build(int capacity) {
         return new Pool<RevoluteJointDef>(new Pool.AllocateMethod<RevoluteJointDef>() {
             @Override
             public RevoluteJointDef run() {
@@ -18,7 +18,7 @@ public final class RevoluteJointDefBuilder {
             }
         }, new Pool.ResetMethod<RevoluteJointDef>() {
             @Override
-            public void run(final RevoluteJointDef revoluteJointDef) {
+            public void run(RevoluteJointDef revoluteJointDef) {
                 revoluteJointDef.type = JointDef.JointType.Unknown;
                 revoluteJointDef.collideConnected = false;
                 revoluteJointDef.bodyA = null;

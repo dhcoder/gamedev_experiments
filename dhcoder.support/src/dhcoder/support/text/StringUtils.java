@@ -24,7 +24,7 @@ public final class StringUtils {
      * @param input The formatting string.
      * @param args  Various args whose string values will be used in the final string.
      */
-    public static String format(final String input, final Object... args) {
+    public static String format(String input, Object... args) {
         StringBuilder builder = new StringBuilder();
 
         FormatState state = FormatState.CONSUME_TEXT;
@@ -97,7 +97,7 @@ public final class StringUtils {
         return builder.toString();
     }
 
-    public static boolean isWhitespace(final String string) {
+    public static boolean isWhitespace(String string) {
         for (int i = 0; i < string.length(); i++) {
             if (!Character.isWhitespace(string.charAt(i))) {
                 return false;
@@ -106,7 +106,7 @@ public final class StringUtils {
         return true;
     }
 
-    private static void throwUnexpectedCharException(final String input, final char c) {
+    private static void throwUnexpectedCharException(String input, char c) {
         throw new IllegalArgumentException(format("Unexpected char '{0}' parsing string \"{1}\"", c, input));
     }
 }

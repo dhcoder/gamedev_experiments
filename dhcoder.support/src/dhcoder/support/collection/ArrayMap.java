@@ -1,8 +1,7 @@
 package dhcoder.support.collection;
 
-import dhcoder.support.memory.Pool;
-import dhcoder.support.opt.Opt;
-import dhcoder.support.opt.OptInt;
+import dhcoder.support.annotations.NotNull;
+import dhcoder.support.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +63,7 @@ public final class ArrayMap<K, V> {
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     public static boolean RUN_SANITY_CHECKS = false;
 
-    private static int getNextPrimeSize(final int requestedSize) {
+    private static int getNextPrimeSize(int requestedSize) {
         int log2 = log2(requestedSize);
         if (log2 >= PRIME_TABLE_SIZES.length) {
             throw new IllegalStateException("Table can't grow big enough to accomodate requested size");
@@ -73,8 +72,6 @@ public final class ArrayMap<K, V> {
         return PRIME_TABLE_SIZES[log2];
     }
 
-    private final Pool<OptInt> indexPool = Pool.of(OptInt.class, 1);
-    private final Pool<Opt> optPool = Pool.of(Opt.class, 1);
     private final float loadFactor;
     private int size;
     private int resizeAtSize;
@@ -90,7 +87,7 @@ public final class ArrayMap<K, V> {
         this(DEFAULT_EXPECTED_SIZE, DEFAULT_LOAD_FACTOR);
     }
 
-    public ArrayMap(final int expectedSize) {
+    public ArrayMap(int expectedSize) {
         this(expectedSize, DEFAULT_LOAD_FACTOR);
     }
 
@@ -100,7 +97,7 @@ public final class ArrayMap<K, V> {
      *
      * @throws IllegalArgumentException if the input load factor is not between 0 and 1.
      */
-    public ArrayMap(final int expectedSize, final float loadFactor) {
+    public ArrayMap(int expectedSize, float loadFactor) {
         if (loadFactor <= 0.0f || loadFactor >= 1.0f) {
             throw new IllegalArgumentException(format("Load factor must be between 0 and 1. Got {0}", loadFactor));
         }
@@ -141,7 +138,7 @@ public final class ArrayMap<K, V> {
     public List<K> getKeys() {
         ArrayList<K> compactKeys = new ArrayList<K>(size);
         for (int i = 0; i < capacity; ++i) {
-            final K key = keys.get(i);
+            K key = keys.get(i);
             if (key != null) {
                 compactKeys.add(key);
             }
@@ -155,7 +152,7 @@ public final class ArrayMap<K, V> {
     public List<V> getValues() {
         ArrayList<V> compactValues = new ArrayList<V>(size);
         for (int i = 0; i < capacity; ++i) {
-            final V value = values.get(i);
+            V value = values.get(i);
             if (value != null) {
                 compactValues.add(value);
             }
@@ -163,13 +160,9 @@ public final class ArrayMap<K, V> {
         return compactValues;
     }
 
-    public boolean containsKey(final K key) {
-        OptInt indexOpt = indexPool.grabNew();
-        getIndex(key, IndexMethod.GET, indexOpt);
-        boolean containsKey = indexOpt.hasValue();
-        indexPool.free(indexOpt);
-
-        return containsKey;
+    public boolean containsKey(K key) {
+        int index = getIndex(key, IndexMethod.GET);
+        return index >= 0;
     }
 
     /**
@@ -177,31 +170,24 @@ public final class ArrayMap<K, V> {
      *
      * @throws IllegalArgumentException if no value is associated with the passed in key.
      */
-    public V get(final K key) {
-        OptInt indexOpt = indexPool.grabNew();
-        getIndex(key, IndexMethod.GET, indexOpt);
-        if (!indexOpt.hasValue()) {
-            indexPool.free(indexOpt);
+    @NotNull
+    public V get(K key) {
+        int index = getIndex(key, IndexMethod.GET);
+        if (index < 0) {
             throw new IllegalArgumentException(format("No value associated with key {0}", key));
         }
-        V value = values.get(indexOpt.getValue());
-        indexPool.free(indexOpt);
 
-        return value;
+        return values.get(index);
     }
 
     /**
      * This method is functionally equivalent to but more efficient than using {@link #containsKey(Object)} followed
      * by {@link #get(Object)}.
      */
-    public void get(final K key, final Opt<V> outValueOpt) {
-        outValueOpt.clear();
-        OptInt indexOpt = indexPool.grabNew();
-        getIndex(key, IndexMethod.GET, indexOpt);
-        if (indexOpt.hasValue()) {
-            outValueOpt.set(values.get(indexOpt.getValue()));
-        }
-        indexPool.free(indexOpt);
+    @Nullable
+    public V getOrNull(K key) {
+        int index = getIndex(key, IndexMethod.GET);
+        return (index >= 0) ? values.get(index) : null;
     }
 
     /**
@@ -217,7 +203,7 @@ public final class ArrayMap<K, V> {
      * NOTE: Although it is an error condition to use the same key twice in a row, for performance reasons, this method
      * won't report it unless {@link #RUN_SANITY_CHECKS} is set to {@code true}.
      */
-    public void put(final K key, final V value) {
+    public void put(K key, V value) {
 
         if (RUN_SANITY_CHECKS) {
             int numKeys = keys.size();
@@ -229,11 +215,7 @@ public final class ArrayMap<K, V> {
             }
         }
 
-        OptInt indexOpt = indexPool.grabNew();
-        getIndex(key, IndexMethod.PUT, indexOpt);
-        int index = indexOpt.getValue();
-        indexPool.freeCount(1);
-
+        int index = getIndex(key, IndexMethod.PUT);
         setInternal(index, key, value);
 
         size++;
@@ -246,13 +228,14 @@ public final class ArrayMap<K, V> {
     /**
      * Use if you know for sure the key is already in the map. This is a bit more efficient than using {@link #remove
      * (Object)} followed by {@link #put(Object, Object)}
+     *
+     * @throws IllegalStateException if the key you want to replace doesn't already exist in the map.
      */
-    public void replace(final K key, final V value) {
-
-        OptInt indexOpt = indexPool.grabNew();
-        getIndex(key, IndexMethod.GET, indexOpt);
-        int index = indexOpt.getValue();
-        indexPool.freeCount(1);
+    public void replace(K key, V value) {
+        int index = getIndex(key, IndexMethod.GET);
+        if (index < 0) {
+            throw new IllegalStateException(format("No value associated with key {0}", key));
+        }
 
         setInternal(index, key, value);
     }
@@ -261,17 +244,14 @@ public final class ArrayMap<K, V> {
      * Use this if you're not sure if the key is already in the map or not. This is less efficient than either using
      * {@link #put(Object, Object)} or {@link #replace(Object, Object)} but is useful if you simply don't care.
      */
-    public InsertMethod putOrReplace(final K key, final V value) {
-        OptInt indexOpt = indexPool.grabNew();
-        getIndex(key, IndexMethod.GET, indexOpt);
+    public InsertMethod putOrReplace(K key, V value) {
+        int index = getIndex(key, IndexMethod.GET);
 
-        if (indexOpt.hasValue()) {
-            setInternal(indexOpt.getValue(), key, value);
-            indexPool.freeCount(1);
+        if (index >= 0) {
+            setInternal(index, key, value);
             return InsertMethod.REPLACE;
         }
         else {
-            indexPool.freeCount(1);
             put(key, value);
             return InsertMethod.PUT;
         }
@@ -280,20 +260,18 @@ public final class ArrayMap<K, V> {
     /**
      * Remove the value associated with the passed in key. The key MUST be in the map because this method needs to
      * return a non-null value. If you are not sure if the key is in the map, you can instead use
-     * {@link #remove(Object, Opt)}, or if you don't care about the return value, you can use {@link #removeIf(Object)}.
+     * {@link #removeOrNull(Object)}, or if you don't care about the return value, you can use
+     * {@link #removeIf(Object)}.
      *
      * @throws IllegalArgumentException if the key is not found in the map.
      */
-    public V remove(final K key) {
-        Opt<V> valueOpt = optPool.grabNew();
-        remove(key, valueOpt);
-        if (!valueOpt.hasValue()) {
-            optPool.free(valueOpt);
+    @NotNull
+    public V remove(K key) {
+        V value = removeOrNull(key);
+        if (value == null) {
             throw new IllegalArgumentException(format("No value associated with key {0}", key));
         }
 
-        V value = valueOpt.getValue();
-        optPool.free(valueOpt);
         return value;
     }
 
@@ -302,27 +280,20 @@ public final class ArrayMap<K, V> {
      *
      * @return {@code true} if the key was in the map.
      */
-    public boolean removeIf(final K key) {
-        Opt<V> valueOpt = optPool.grabNew();
-        remove(key, valueOpt);
-        boolean removed = valueOpt.hasValue();
-        optPool.free(valueOpt);
-
-        return removed;
+    public boolean removeIf(K key) {
+        V value = removeOrNull(key);
+        return (value != null);
     }
 
     /**
      * Like {@link #remove(Object)} but can handle the case of the key not being found in the map.
      */
-    public void remove(final K key, final Opt<V> outValueOpt) {
-        OptInt indexOpt = indexPool.grabNew();
-        getIndex(key, IndexMethod.GET, indexOpt);
-        if (!indexOpt.hasValue()) {
-            indexPool.free(indexOpt);
-            return;
+    @Nullable
+    public V removeOrNull(K key) {
+        int index = getIndex(key, IndexMethod.GET);
+        if (index < 0) {
+            return null;
         }
-        int index = indexOpt.getValue();
-        indexPool.free(indexOpt);
 
         keyIsDead[index] = true;
         V value = values.get(index);
@@ -331,7 +302,7 @@ public final class ArrayMap<K, V> {
 
         size--;
 
-        outValueOpt.set(value);
+        return value;
     }
 
     public void clear() {
@@ -344,7 +315,7 @@ public final class ArrayMap<K, V> {
         size = 0;
     }
 
-    private void setInternal(final int index, final K key, final V value) {
+    private void setInternal(int index, K key, V value) {
         keys.set(index, key);
         values.set(index, value);
         keyIsDead[index] = false;
@@ -385,9 +356,13 @@ public final class ArrayMap<K, V> {
 
     // Returns index of the key in this hashtable. If 'forGetMethods' is true, 'outIndex' won't have any value set if
     // the key couldn't be found.
-    private void getIndex(final K key, final IndexMethod indexMethod, final OptInt outIndex) {
-        outIndex.clear();
 
+    /**
+     * Returns the index of the key in this table's inner array, or -1 if not found.
+     * @param indexMethod Whether we are querying an index for retrieval or insertion. If insertion, -1 will never be
+     *                    returned.
+     */
+    private int getIndex(K key, IndexMethod indexMethod) {
         int positiveHashCode = key.hashCode() & 0x7FFFFFFF;
         int initialIndex = positiveHashCode % capacity;
         int index = initialIndex;
@@ -395,13 +370,11 @@ public final class ArrayMap<K, V> {
         while ((keys.get(index) != null || keyIsDead[index]) && loopCount <= capacity) {
             if (indexMethod == IndexMethod.PUT && keyIsDead[index]) {
                 // This used to be a bucket for a key that got removed, so it's free for reuse!
-                outIndex.set(index);
-                return;
+                return index;
             }
 
             if (key.equals(keys.get(index))) {
-                outIndex.set(index);
-                return;
+                return index;
             }
 
             index = (initialIndex + loopCount * loopCount) % capacity; // Quadratic probing
@@ -409,7 +382,10 @@ public final class ArrayMap<K, V> {
         }
 
         if (indexMethod == IndexMethod.PUT) {
-            outIndex.set(index);
+            return index;
+        }
+        else {
+            return -1;
         }
     }
 }

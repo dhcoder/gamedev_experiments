@@ -3,10 +3,10 @@ package dhcoder.libgdx.memory;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * TODO: HEADER COMMENT HERE.
+ * Misc. helper methods
  */
 public final class LibgdxUtils {
-    public static void resetSprite(final Sprite sprite) {
+    public static void resetSprite(Sprite sprite) {
         sprite.setTexture(null);
         sprite.setScale(1f, 1f);
         sprite.setRotation(0f);

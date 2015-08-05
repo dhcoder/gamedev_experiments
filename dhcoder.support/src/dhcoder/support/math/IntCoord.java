@@ -14,7 +14,7 @@ public final class IntCoord implements Poolable {
 
     public IntCoord() {}
 
-    public IntCoord(final int x, final int y) {
+    public IntCoord(int x, int y) {
 
         this.x = x;
         this.y = y;
@@ -24,7 +24,7 @@ public final class IntCoord implements Poolable {
         return x;
     }
 
-    public IntCoord setX(final int x) {
+    public IntCoord setX(int x) {
         this.x = x;
         return this;
     }
@@ -33,18 +33,18 @@ public final class IntCoord implements Poolable {
         return y;
     }
 
-    public IntCoord setY(final int y) {
+    public IntCoord setY(int y) {
         this.y = y;
         return this;
     }
 
-    public IntCoord set(final int x, final int y) {
+    public IntCoord set(int x, int y) {
         this.x = x;
         this.y = y;
         return this;
     }
 
-    public IntCoord setFrom(final IntCoord rhs) {
+    public IntCoord setFrom(IntCoord rhs) {
         this.x = rhs.x;
         this.y = rhs.y;
         return this;
@@ -63,16 +63,15 @@ public final class IntCoord implements Poolable {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
         IntCoord intCoord = (IntCoord)o;
 
         if (x != intCoord.x) { return false; }
-        if (y != intCoord.y) { return false; }
+        return y == intCoord.y;
 
-        return true;
     }
 
     @Override

@@ -3,7 +3,7 @@ package dhcoder.support.shape;
 import static dhcoder.support.text.StringUtils.format;
 
 /**
- * Class that represents a circle
+ * Class that represents a rectangle
  */
 public final class Rectangle implements Shape {
 
@@ -14,22 +14,22 @@ public final class Rectangle implements Shape {
         this(0f, 0f);
     }
 
-    public Rectangle(final float halfWidth, final float halfHeight) {
+    public Rectangle(float halfWidth, float halfHeight) {
         setHalfSize(halfWidth, halfHeight);
     }
 
     @Override
-    public boolean containsPoint(final float x, final float y) {
+    public boolean containsPoint(float x, float y) {
         return Math.abs(x) < halfWidth && Math.abs(y) < halfHeight;
     }
 
-    public float getLeft(final float xOrigin) { return xOrigin - halfWidth; }
+    public float getLeft(float xOrigin) { return xOrigin - halfWidth; }
 
-    public float getBottom(final float yOrigin) { return yOrigin - halfHeight; }
+    public float getBottom(float yOrigin) { return yOrigin - halfHeight; }
 
-    public float getRight(final float xOrigin) { return xOrigin + halfWidth; }
+    public float getRight(float xOrigin) { return xOrigin + halfWidth; }
 
-    public float getTop(final float yOrigin) { return yOrigin + halfHeight; }
+    public float getTop(float yOrigin) { return yOrigin + halfHeight; }
 
     public float getHalfWidth() {
         return halfWidth;
@@ -39,7 +39,7 @@ public final class Rectangle implements Shape {
         return halfHeight;
     }
 
-    public Rectangle setHalfSize(final float halfWidth, final float halfHeight) {
+    public Rectangle setHalfSize(float halfWidth, float halfHeight) {
         if (halfWidth < 0f || halfHeight < 0f) {
             throw new IllegalArgumentException(
                 format("Can't create rectangle with < 0 half-size ({0},{1})", halfWidth, halfHeight));

@@ -1,12 +1,11 @@
 package dhcoder.support.state;
 
-import dhcoder.support.opt.Opt;
+import dhcoder.support.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.google.common.truth.Truth.assertThat;
 import static dhcoder.test.TestUtils.assertException;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 
 public final class StateMachineTest {
 
@@ -30,7 +29,7 @@ public final class StateMachineTest {
         private int ranCount;
 
         @Override
-        public void run(final TestState fromState, final TestEvent withEvent, final Opt eventData) {
+        public void run(TestState fromState, TestEvent withEvent, @Nullable Object eventData) {
             ranCount++;
         }
 
@@ -41,7 +40,7 @@ public final class StateMachineTest {
 
     private final class TestMachine extends StateMachine<TestState, TestEvent> {
 
-        public TestMachine(final TestState startState) {
+        public TestMachine(TestState startState) {
             super(startState);
         }
     }
@@ -55,35 +54,35 @@ public final class StateMachineTest {
 
         fsm.registerEvent(TestState.A, TestEvent.A_TO_B, new StateTransitionHandler<TestState, TestEvent>() {
             @Override
-            public TestState run(final TestState fromState, final TestEvent withEvent, final Opt eventData) {
+            public TestState run(TestState fromState, TestEvent withEvent, @Nullable Object eventData) {
                 return TestState.B;
             }
         });
 
         fsm.registerEvent(TestState.A, TestEvent.A_TO_C, new StateTransitionHandler<TestState, TestEvent>() {
             @Override
-            public TestState run(final TestState fromState, final TestEvent withEvent, final Opt eventData) {
+            public TestState run(TestState fromState, TestEvent withEvent, @Nullable Object eventData) {
                 return TestState.C;
             }
         });
 
         fsm.registerEvent(TestState.B, TestEvent.B_TO_C, new StateTransitionHandler<TestState, TestEvent>() {
             @Override
-            public TestState run(final TestState fromState, final TestEvent withEvent, final Opt eventData) {
+            public TestState run(TestState fromState, TestEvent withEvent, @Nullable Object eventData) {
                 return TestState.C;
             }
         });
 
         fsm.registerEvent(TestState.B, TestEvent.ANY_TO_A, new StateTransitionHandler<TestState, TestEvent>() {
             @Override
-            public TestState run(final TestState fromState, final TestEvent withEvent, final Opt eventData) {
+            public TestState run(TestState fromState, TestEvent withEvent, @Nullable Object eventData) {
                 return TestState.A;
             }
         });
 
         fsm.registerEvent(TestState.C, TestEvent.ANY_TO_A, new StateTransitionHandler<TestState, TestEvent>() {
             @Override
-            public TestState run(final TestState fromState, final TestEvent withEvent, final Opt eventData) {
+            public TestState run(TestState fromState, TestEvent withEvent, @Nullable Object eventData) {
                 return TestState.A;
             }
         });
@@ -96,39 +95,39 @@ public final class StateMachineTest {
         TestMachine fsmA = new TestMachine(TestState.A);
         TestMachine fsmC = new TestMachine(TestState.C);
 
-        assertThat(fsmA.getCurrentState(), equalTo(TestState.A));
-        assertThat(fsmC.getCurrentState(), equalTo(TestState.C));
+        assertThat(fsmA.getCurrentState()).isEqualTo(TestState.A);
+        assertThat(fsmC.getCurrentState()).isEqualTo(TestState.C);
     }
 
     @Test
     public void testStateMachineChangesStateAsExpected() {
-        assertThat(fsm.getCurrentState(), equalTo(TestState.A));
+        assertThat(fsm.getCurrentState()).isEqualTo(TestState.A);
         fsm.handleEvent(TestEvent.A_TO_B);
-        assertThat(fsm.getCurrentState(), equalTo(TestState.B));
+        assertThat(fsm.getCurrentState()).isEqualTo(TestState.B);
         fsm.handleEvent(TestEvent.B_TO_C);
-        assertThat(fsm.getCurrentState(), equalTo(TestState.C));
+        assertThat(fsm.getCurrentState()).isEqualTo(TestState.C);
         fsm.handleEvent(TestEvent.ANY_TO_A);
-        assertThat(fsm.getCurrentState(), equalTo(TestState.A));
+        assertThat(fsm.getCurrentState()).isEqualTo(TestState.A);
         fsm.handleEvent(TestEvent.A_TO_B);
-        assertThat(fsm.getCurrentState(), equalTo(TestState.B));
+        assertThat(fsm.getCurrentState()).isEqualTo(TestState.B);
         fsm.handleEvent(TestEvent.B_TO_C);
-        assertThat(fsm.getCurrentState(), equalTo(TestState.C));
+        assertThat(fsm.getCurrentState()).isEqualTo(TestState.C);
     }
 
     @Test
     public void defaultHandlerCatchesUnregisteredEvent() {
 
-        assertThat(defaultHandler.getRanCount(), equalTo(0));
+        assertThat(defaultHandler.getRanCount()).isEqualTo(0);
 
         fsm.handleEvent(TestEvent.A_TO_B);
-        assertThat(defaultHandler.getRanCount(), equalTo(0));
+        assertThat(defaultHandler.getRanCount()).isEqualTo(0);
 
         fsm.handleEvent(TestEvent.UNREGISTERED_EVENT);
-        assertThat(defaultHandler.getRanCount(), equalTo(1));
+        assertThat(defaultHandler.getRanCount()).isEqualTo(1);
 
-        assertThat(fsm.getCurrentState(), equalTo(TestState.B));
+        assertThat(fsm.getCurrentState()).isEqualTo(TestState.B);
         fsm.handleEvent(TestEvent.A_TO_B);
-        assertThat(defaultHandler.getRanCount(), equalTo(2));
+        assertThat(defaultHandler.getRanCount()).isEqualTo(2);
     }
 
     @Test
@@ -139,7 +138,7 @@ public final class StateMachineTest {
             public void run() {
                 fsm.registerEvent(TestState.A, TestEvent.A_TO_B, new StateTransitionHandler<TestState, TestEvent>() {
                     @Override
-                    public TestState run(final TestState fromState, final TestEvent withEvent, final Opt eventData) {
+                    public TestState run(TestState fromState, TestEvent withEvent, @Nullable Object eventData) {
                         return TestState.B;
                     }
                 });
@@ -159,9 +158,9 @@ public final class StateMachineTest {
             }
 
             @Override
-            public TestState run(final TestState fromState, final TestEvent withEvent, final Opt eventData) {
-                assertThat(eventData.hasValue(), equalTo(true));
-                assertThat(eventData.getValue(), equalTo(dummyData));
+            public TestState run(TestState fromState, TestEvent withEvent, @Nullable Object eventData) {
+                assertThat(eventData).isNotNull();
+                assertThat(eventData).isEqualTo(dummyData);
 
                 ran = true;
                 return fromState;
@@ -172,9 +171,9 @@ public final class StateMachineTest {
         DummyDataHandler handler = new DummyDataHandler();
         fsm.registerEvent(TestState.A, TestEvent.EVENT_WITH_DATA, handler);
 
-        assertThat(handler.wasRun(), equalTo(false));
+        assertThat(handler.wasRun()).isEqualTo(false);
         fsm.handleEvent(TestEvent.EVENT_WITH_DATA, dummyData);
-        assertThat(handler.wasRun(), equalTo(true));
+        assertThat(handler.wasRun()).isEqualTo(true);
     }
 
 }

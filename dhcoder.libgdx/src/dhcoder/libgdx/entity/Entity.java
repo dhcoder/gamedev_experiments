@@ -1,7 +1,8 @@
 package dhcoder.libgdx.entity;
 
+import dhcoder.support.annotations.NotNull;
+import dhcoder.support.annotations.Nullable;
 import dhcoder.support.memory.Poolable;
-import dhcoder.support.opt.Opt;
 import dhcoder.support.time.Duration;
 
 import java.util.ArrayList;
@@ -21,13 +22,12 @@ public final class Entity implements Poolable {
     // Map a component's type to the component itself
     private final List<Component> components = new ArrayList<Component>();
     private final EntityManager manager;
-    private boolean active;
     private boolean initialized;
 
     /**
      * Restricted access - use {@link EntityManager#newEntity} instead.
      */
-    Entity(final EntityManager manager) {
+    Entity(EntityManager manager) {
         reset();
         this.manager = manager;
     }
@@ -43,7 +43,7 @@ public final class Entity implements Poolable {
      * @throws IllegalStateException if you try to add a component to an entity that's already in use (that is, has
      *                               been updated at least once).
      */
-    public <C extends Component> C addComponent(final Class<C> componentClass) {
+    public <C extends Component> C addComponent(Class<C> componentClass) {
         if (initialized) {
             throw new IllegalStateException("Can't add a component to an Entity that's already in use.");
         }
@@ -54,28 +54,11 @@ public final class Entity implements Poolable {
     }
 
     /**
-     * Returns the component that matches the input type, if found.
+     * Returns the first component that matches the input type, if found.
      */
     @SuppressWarnings("unchecked") // (T) cast is safe because of instanceof check
-    public <T extends Component> void getComponent(final Class<T> classType, final Opt<T> outComponent) {
-        outComponent.clear();
-        int numComponets = components.size();
-        for (int i = 0; i < numComponets; i++) {
-            Component component = components.get(i);
-            if (classType.isInstance(component)) {
-                outComponent.set((T)component);
-            }
-        }
-    }
-
-    /**
-     * Require that there be at least one instance of the specified {@link Component} on this entity, and return the
-     * first one.
-     *
-     * @return the first matching component
-     * @throws IllegalStateException if there aren't any components that match the class type parameter.
-     */
-    public <T extends Component> T requireComponent(final Class<T> classType) throws IllegalStateException {
+    @Nullable
+    public <T extends Component> T getComponent(Class<T> classType) {
         int numComponets = components.size();
         for (int i = 0; i < numComponets; i++) {
             Component component = components.get(i);
@@ -84,18 +67,37 @@ public final class Entity implements Poolable {
             }
         }
 
-        throw new IllegalStateException(format("Entity doesn't have any instances of {0}", classType.getSimpleName()));
+        return null;
+    }
+
+    /**
+     * Require that there be at least one instance of the specified {@link Component} on this entity, and return the
+     * first one.
+     *
+     * @throws IllegalStateException if there aren't any components that match the class type parameter.
+     */
+    @SuppressWarnings("unchecked") // (T) cast is safe because of instanceof check
+    @NotNull
+    public <T extends Component> T requireComponent(Class<T> classType) throws IllegalStateException {
+        T component = getComponent(classType);
+        if (component == null) {
+            throw new IllegalStateException(format("Entity doesn't have any instances of {0}",
+                classType.getSimpleName()));
+        }
+        return component;
     }
 
     /**
      * Require that there be at least one instance of the specified {@link Component} on this entity, and that it exists
      * earlier in the list than another component.
      */
-    public <T extends Component> T requireComponentAfter(final Component otherComponent, final Class<T> classType)
+    @SuppressWarnings("unchecked") // (T) cast is safe because of instanceof check
+    @NotNull
+    public <T extends Component> T requireComponentAfter(Component otherComponent, Class<T> classType)
         throws IllegalStateException {
         boolean isAfter = false;
-        int numComponets = components.size();
-        for (int i = 0; i < numComponets; i++) {
+        int numComponents = components.size();
+        for (int i = 0; i < numComponents; i++) {
             Component component = components.get(i);
             if (component == otherComponent) {
                 isAfter = true;
@@ -114,10 +116,12 @@ public final class Entity implements Poolable {
      * Require that there be at least one instance of the specified {@link Component} on this entity, and that it exists
      * before another component is found.
      */
-    public <T extends Component> T requireComponentBefore(final Component otherComponent, final Class<T> classType)
+    @SuppressWarnings("unchecked") // (T) cast is safe because of instanceof check
+    @NotNull
+    public <T extends Component> T requireComponentBefore(Component otherComponent, Class<T> classType)
         throws IllegalStateException {
-        int numComponets = components.size();
-        for (int i = 0; i < numComponets; i++) {
+        int numComponents = components.size();
+        for (int i = 0; i < numComponents; i++) {
             Component component = components.get(i);
             if (component == otherComponent) {
                 break;
@@ -135,7 +139,7 @@ public final class Entity implements Poolable {
     /**
      * Update this entity. The passed in time is in seconds.
      */
-    public void update(final Duration elapsedTime) {
+    public void update(Duration elapsedTime) {
         if (!initialized) {
             initialize();
         }
@@ -170,7 +174,7 @@ public final class Entity implements Poolable {
     private void initialize() {
         assert !initialized;
 
-        final int numComponents = components.size();
+        int numComponents = components.size();
         for (int i = 0; i < numComponents; i++) {
             Component component = components.get(i);
             component.initialize(this);

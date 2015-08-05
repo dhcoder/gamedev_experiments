@@ -23,7 +23,7 @@ public final class ServiceLocator {
     /**
      * Register a service under a type key.
      */
-    public <T> void register(final Class<? extends T> classType, final T instance) {
+    public <T> void register(Class<? extends T> classType, T instance) {
         if (services.containsKey(classType)) {
             throw new IllegalArgumentException(format("Attempt to register duplicate service type {0}", classType));
         }
@@ -32,7 +32,7 @@ public final class ServiceLocator {
     }
 
     @SuppressWarnings("unchecked") // (T) cast is safe because register always puts the correct type in
-    public <T> T get(final Class<? extends T> classType) {
+    public <T> T get(Class<? extends T> classType) {
         if (!services.containsKey(classType)) {
             throw new IllegalArgumentException(format("Request for unregistered service {0}", classType));
         }

@@ -13,12 +13,12 @@ public final class Circle implements Shape {
         this(0f);
     }
 
-    public Circle(final float radius) {
+    public Circle(float radius) {
         setRadius(radius);
     }
 
     @Override
-    public boolean containsPoint(final float x, final float y) {
+    public boolean containsPoint(float x, float y) {
         return (x * x + y * y) <= radius * radius;
     }
 
@@ -31,7 +31,7 @@ public final class Circle implements Shape {
         return radius;
     }
 
-    public Circle setRadius(final float radius) {
+    public Circle setRadius(float radius) {
         if (radius < 0f) {
             throw new IllegalArgumentException(format("Can't create circle with < 0 radius {0}", radius));
         }

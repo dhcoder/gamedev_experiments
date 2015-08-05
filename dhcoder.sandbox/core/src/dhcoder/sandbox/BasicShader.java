@@ -24,4 +24,6 @@ public final class BasicShader {
     public ShaderProgram getProgram() {
         return myProgram;
     }
+
+    public ShaderProgram testFunc() { return myProgram; }
 }

@@ -8,7 +8,7 @@ import dhcoder.support.memory.Pool;
  */
 public final class Vector2PoolBuilder {
 
-    public static Pool<Vector2> build(final int capacity) {
+    public static Pool<Vector2> build(int capacity) {
         return new Pool<Vector2>(new Pool.AllocateMethod<Vector2>() {
             @Override
             public Vector2 run() {
@@ -16,7 +16,7 @@ public final class Vector2PoolBuilder {
             }
         }, new Pool.ResetMethod<Vector2>() {
             @Override
-            public void run(final Vector2 item) {
+            public void run(Vector2 item) {
                 item.setZero();
             }
         }, capacity);

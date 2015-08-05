@@ -1,8 +1,9 @@
 package dhcoder.support.state;
 
+import dhcoder.support.annotations.NotNull;
+import dhcoder.support.annotations.Nullable;
 import dhcoder.support.collection.Key2;
 import dhcoder.support.memory.Pool;
-import dhcoder.support.opt.Opt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +23,8 @@ public class StateMachine<S extends Enum, E extends Enum> {
 
     private final Map<Key2<S, E>, StateTransitionHandler<S, E>> eventResponses =
         new HashMap<Key2<S, E>, StateTransitionHandler<S, E>>();
-    private final Opt<StateEventHandler<S, E>> defaultHandlerOpt = Opt.withNoValue();
     private final Pool<Key2> keyPool = Pool.of(Key2.class, 1);
-    private final Pool<Opt> optPool = Pool.of(Opt.class, 1);
+    @Nullable private StateEventHandler<S, E> defaultHandler;
     private S startState;
     private S currentState;
 
@@ -47,8 +47,8 @@ public class StateMachine<S extends Enum, E extends Enum> {
      * Set a method handler which, if set, will get called any time an event is called on the state machine that isn't
      * handled.
      */
-    public final void setDefaultHandler(final StateEventHandler<S, E> defaultHandler) {
-        defaultHandlerOpt.set(defaultHandler);
+    public final void setDefaultHandler(@NotNull StateEventHandler<S, E> defaultHandler) {
+        this.defaultHandler = defaultHandler;
     }
 
     /**
@@ -58,7 +58,7 @@ public class StateMachine<S extends Enum, E extends Enum> {
      *
      * @throws IllegalArgumentException if the state/event pair has previously been registered.
      */
-    public final void registerEvent(final S state, final E event, final StateTransitionHandler<S, E> eventHandler) {
+    public final void registerEvent(S state, E event, StateTransitionHandler<S, E> eventHandler) {
         Key2<S, E> key = new Key2<S, E>(state, event);
         if (eventResponses.containsKey(key)) {
             throw new IllegalArgumentException(
@@ -71,29 +71,20 @@ public class StateMachine<S extends Enum, E extends Enum> {
     /**
      * Tell the state machine to handle the passed in event given the current state.
      */
-    public final void handleEvent(final E event) {
-        Opt emptyOpt = optPool.grabNew();
-        handleEvent(event, emptyOpt);
-        optPool.free(emptyOpt);
+    public final void handleEvent(E event) {
+        handleEvent(event, null);
     }
 
     /**
      * Like {@link #handleEvent(Enum)} but with some additional data that is related to the event.
      */
-    public final void handleEvent(final E event, final Object eventData) {
-        Opt dataOpt = optPool.grabNew();
-        dataOpt.set(eventData);
-        handleEvent(event, dataOpt);
-        optPool.free(dataOpt);
-    }
-
-    private void handleEvent(final E event, final Opt eventData) {
+    public void handleEvent(E event, @Nullable Object eventData) {
         Key2 key = keyPool.grabNew();
         key.set(currentState, event);
         if (!eventResponses.containsKey(key)) {
             keyPool.free(key);
-            if (defaultHandlerOpt.hasValue()) {
-                defaultHandlerOpt.getValue().run(currentState, event, eventData);
+            if (defaultHandler != null) {
+                defaultHandler.run(currentState, event, eventData);
             }
             return;
         }

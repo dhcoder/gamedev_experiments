@@ -10,7 +10,7 @@ import dhcoder.support.memory.Pool;
  */
 public final class DistanceJointDefBuilder {
 
-    public static Pool<DistanceJointDef> build(final int capacity) {
+    public static Pool<DistanceJointDef> build(int capacity) {
         return new Pool<DistanceJointDef>(new Pool.AllocateMethod<DistanceJointDef>() {
             @Override
             public DistanceJointDef run() {
@@ -18,7 +18,7 @@ public final class DistanceJointDefBuilder {
             }
         }, new Pool.ResetMethod<DistanceJointDef>() {
             @Override
-            public void run(final DistanceJointDef distanceJointDef) {
+            public void run(DistanceJointDef distanceJointDef) {
                 distanceJointDef.type = JointType.Unknown;
                 distanceJointDef.collideConnected = false;
                 distanceJointDef.bodyA = null;

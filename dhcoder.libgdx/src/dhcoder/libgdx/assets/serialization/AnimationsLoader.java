@@ -26,10 +26,10 @@ public final class AnimationsLoader {
         public int[][] frames;
     }
 
-    public static void load(final Json json, final TilesetDatastore tilesets, final AnimationDatastore animations,
-        final String jsonPath) {
+    public static void load(Json json, TilesetDatastore tilesets, AnimationDatastore animations,
+                            String jsonPath) {
 
-        final FileHandle fileHandle = Gdx.files.internal(jsonPath);
+        FileHandle fileHandle = Gdx.files.internal(jsonPath);
         AnimationGroupData groupData = json.fromJson(AnimationGroupData.class, fileHandle.readString());
 
         Tileset tileset = tilesets.get(groupData.tilesetPath);
@@ -43,7 +43,7 @@ public final class AnimationsLoader {
                 frames[j] = tileset.getTile(animData.frames[j][0], animData.frames[j][1]);
             }
 
-            final Animation animation = new Animation(animData.frameDuration, frames);
+            Animation animation = new Animation(animData.frameDuration, frames);
             animation.setPlayMode(Animation.PlayMode.LOOP);
             animationGroup.add(animData.name, animation);
         }

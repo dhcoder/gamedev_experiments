@@ -1,14 +1,11 @@
 package dhcoder.support.collection;
 
-import dhcoder.support.opt.Opt;
 import org.junit.Test;
 
 import java.util.List;
 
+import static com.google.common.truth.Truth.assertThat;
 import static dhcoder.test.TestUtils.assertException;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.core.IsEqual.equalTo;
 
 public final class ArrayMapTest {
 
@@ -78,29 +75,29 @@ public final class ArrayMapTest {
         numericStringMap.put(8, "eight");
         numericStringMap.put(9, "nine");
 
-        assertThat(numericStringMap.getSize(), equalTo(9));
+        assertThat(numericStringMap.getSize()).isEqualTo(9);
 
-        assertThat(numericStringMap.get(1), equalTo("one"));
-        assertThat(numericStringMap.get(2), equalTo("two"));
-        assertThat(numericStringMap.get(3), equalTo("three"));
-        assertThat(numericStringMap.get(4), equalTo("four"));
-        assertThat(numericStringMap.get(5), equalTo("five"));
-        assertThat(numericStringMap.get(6), equalTo("six"));
-        assertThat(numericStringMap.get(7), equalTo("seven"));
-        assertThat(numericStringMap.get(8), equalTo("eight"));
-        assertThat(numericStringMap.get(9), equalTo("nine"));
+        assertThat(numericStringMap.get(1)).isEqualTo("one");
+        assertThat(numericStringMap.get(2)).isEqualTo("two");
+        assertThat(numericStringMap.get(3)).isEqualTo("three");
+        assertThat(numericStringMap.get(4)).isEqualTo("four");
+        assertThat(numericStringMap.get(5)).isEqualTo("five");
+        assertThat(numericStringMap.get(6)).isEqualTo("six");
+        assertThat(numericStringMap.get(7)).isEqualTo("seven");
+        assertThat(numericStringMap.get(8)).isEqualTo("eight");
+        assertThat(numericStringMap.get(9)).isEqualTo("nine");
 
-        assertThat(numericStringMap.remove(1), equalTo("one"));
-        assertThat(numericStringMap.remove(2), equalTo("two"));
-        assertThat(numericStringMap.remove(3), equalTo("three"));
-        assertThat(numericStringMap.remove(4), equalTo("four"));
-        assertThat(numericStringMap.remove(5), equalTo("five"));
-        assertThat(numericStringMap.remove(6), equalTo("six"));
-        assertThat(numericStringMap.remove(7), equalTo("seven"));
-        assertThat(numericStringMap.remove(8), equalTo("eight"));
-        assertThat(numericStringMap.remove(9), equalTo("nine"));
+        assertThat(numericStringMap.remove(1)).isEqualTo("one");
+        assertThat(numericStringMap.remove(2)).isEqualTo("two");
+        assertThat(numericStringMap.remove(3)).isEqualTo("three");
+        assertThat(numericStringMap.remove(4)).isEqualTo("four");
+        assertThat(numericStringMap.remove(5)).isEqualTo("five");
+        assertThat(numericStringMap.remove(6)).isEqualTo("six");
+        assertThat(numericStringMap.remove(7)).isEqualTo("seven");
+        assertThat(numericStringMap.remove(8)).isEqualTo("eight");
+        assertThat(numericStringMap.remove(9)).isEqualTo("nine");
 
-        assertThat(numericStringMap.getSize(), equalTo(0));
+        assertThat(numericStringMap.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -117,29 +114,29 @@ public final class ArrayMapTest {
         stringNumericMap.put("eight", 8);
         stringNumericMap.put("nine", 9);
 
-        assertThat(stringNumericMap.getSize(), equalTo(9));
+        assertThat(stringNumericMap.getSize()).isEqualTo(9);
 
-        assertThat(stringNumericMap.get("one"), equalTo(1));
-        assertThat(stringNumericMap.get("two"), equalTo(2));
-        assertThat(stringNumericMap.get("three"), equalTo(3));
-        assertThat(stringNumericMap.get("four"), equalTo(4));
-        assertThat(stringNumericMap.get("five"), equalTo(5));
-        assertThat(stringNumericMap.get("six"), equalTo(6));
-        assertThat(stringNumericMap.get("seven"), equalTo(7));
-        assertThat(stringNumericMap.get("eight"), equalTo(8));
-        assertThat(stringNumericMap.get("nine"), equalTo(9));
+        assertThat(stringNumericMap.get("one")).isEqualTo(1);
+        assertThat(stringNumericMap.get("two")).isEqualTo(2);
+        assertThat(stringNumericMap.get("three")).isEqualTo(3);
+        assertThat(stringNumericMap.get("four")).isEqualTo(4);
+        assertThat(stringNumericMap.get("five")).isEqualTo(5);
+        assertThat(stringNumericMap.get("six")).isEqualTo(6);
+        assertThat(stringNumericMap.get("seven")).isEqualTo(7);
+        assertThat(stringNumericMap.get("eight")).isEqualTo(8);
+        assertThat(stringNumericMap.get("nine")).isEqualTo(9);
 
-        assertThat(stringNumericMap.remove("one"), equalTo(1));
-        assertThat(stringNumericMap.remove("two"), equalTo(2));
-        assertThat(stringNumericMap.remove("three"), equalTo(3));
-        assertThat(stringNumericMap.remove("four"), equalTo(4));
-        assertThat(stringNumericMap.remove("five"), equalTo(5));
-        assertThat(stringNumericMap.remove("six"), equalTo(6));
-        assertThat(stringNumericMap.remove("seven"), equalTo(7));
-        assertThat(stringNumericMap.remove("eight"), equalTo(8));
-        assertThat(stringNumericMap.remove("nine"), equalTo(9));
+        assertThat(stringNumericMap.remove("one")).isEqualTo(1);
+        assertThat(stringNumericMap.remove("two")).isEqualTo(2);
+        assertThat(stringNumericMap.remove("three")).isEqualTo(3);
+        assertThat(stringNumericMap.remove("four")).isEqualTo(4);
+        assertThat(stringNumericMap.remove("five")).isEqualTo(5);
+        assertThat(stringNumericMap.remove("six")).isEqualTo(6);
+        assertThat(stringNumericMap.remove("seven")).isEqualTo(7);
+        assertThat(stringNumericMap.remove("eight")).isEqualTo(8);
+        assertThat(stringNumericMap.remove("nine")).isEqualTo(9);
 
-        assertThat(stringNumericMap.getSize(), equalTo(0));
+        assertThat(stringNumericMap.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -156,16 +153,10 @@ public final class ArrayMapTest {
         numericStringMap.put(8, "eight");
         numericStringMap.put(9, "nine");
 
-        Opt<String> valueOpt = Opt.withNoValue();
+        assertThat(numericStringMap.get(1)).isEqualTo("one");
+        assertThat(numericStringMap.get(8)).isEqualTo("eight");
 
-        numericStringMap.get(1, valueOpt);
-        assertThat(valueOpt.getValue(), equalTo("one"));
-
-        numericStringMap.get(8, valueOpt);
-        assertThat(valueOpt.getValue(), equalTo("eight"));
-
-        numericStringMap.get(99, valueOpt);
-        assertThat(valueOpt.hasValue(), equalTo(false));
+        assertThat(numericStringMap.getOrNull(99)).isNull();
     }
 
     @Test
@@ -174,16 +165,16 @@ public final class ArrayMapTest {
 
         for (int i = 0; i < 10; ++i) {
             hashCollisionMap.put(new HashCollisionItem(i), i);
-            assertThat(hashCollisionMap.getSize(), equalTo(i + 1));
+            assertThat(hashCollisionMap.getSize()).isEqualTo(i + 1);
         }
 
         for (int i = 0; i < 10; ++i) {
-            assertThat(hashCollisionMap.get(new HashCollisionItem(i)), equalTo(i));
+            assertThat(hashCollisionMap.get(new HashCollisionItem(i))).isEqualTo(i);
         }
 
         for (int i = 9; i >= 0; --i) {
-            assertThat(hashCollisionMap.remove(new HashCollisionItem(i)), equalTo(i));
-            assertThat(hashCollisionMap.getSize(), equalTo(i));
+            assertThat(hashCollisionMap.remove(new HashCollisionItem(i))).isEqualTo(i);
+            assertThat(hashCollisionMap.getSize()).isEqualTo(i);
         }
     }
 
@@ -193,16 +184,16 @@ public final class ArrayMapTest {
 
         for (int i = 0; i < 10; ++i) {
             negativeHashMap.put(new NegativeHashItem(i), i);
-            assertThat(negativeHashMap.getSize(), equalTo(i + 1));
+            assertThat(negativeHashMap.getSize()).isEqualTo(i + 1);
         }
 
         for (int i = 0; i < 10; ++i) {
-            assertThat(negativeHashMap.get(new NegativeHashItem(i)), equalTo(i));
+            assertThat(negativeHashMap.get(new NegativeHashItem(i))).isEqualTo(i);
         }
 
         for (int i = 9; i >= 0; --i) {
-            assertThat(negativeHashMap.remove(new NegativeHashItem(i)), equalTo(i));
-            assertThat(negativeHashMap.getSize(), equalTo(i));
+            assertThat(negativeHashMap.remove(new NegativeHashItem(i))).isEqualTo(i);
+            assertThat(negativeHashMap.getSize()).isEqualTo(i);
         }
     }
 
@@ -212,11 +203,11 @@ public final class ArrayMapTest {
 
         for (int i = 0; i < 10000; ++i) {
             numericMap.put(i, i);
-            assertThat(numericMap.getSize(), equalTo(i + 1));
+            assertThat(numericMap.getSize()).isEqualTo(i + 1);
         }
 
         for (int i = 0; i < 10000; ++i) {
-            assertThat(numericMap.get(i), equalTo(i));
+            assertThat(numericMap.get(i)).isEqualTo(i);
         }
     }
 
@@ -233,12 +224,12 @@ public final class ArrayMapTest {
         }
 
         for (int i = 0; i < 5; ++i) {
-            assertThat(hashCollisionMap.containsKey(new HashCollisionItem(i)), equalTo(false));
+            assertThat(hashCollisionMap.containsKey(new HashCollisionItem(i))).isEqualTo(false);
         }
 
         for (int i = 5; i < 10; ++i) {
             // We can still find items added later into the map even when earlier items were removed
-            assertThat(hashCollisionMap.get(new HashCollisionItem(i)), equalTo(i));
+            assertThat(hashCollisionMap.get(new HashCollisionItem(i))).isEqualTo(i);
         }
 
         for (int i = 0; i < 5; ++i) {
@@ -247,7 +238,7 @@ public final class ArrayMapTest {
         }
 
         for (int i = 0; i < 10; ++i) {
-            assertThat(hashCollisionMap.containsKey(new HashCollisionItem(i)), equalTo(true));
+            assertThat(hashCollisionMap.containsKey(new HashCollisionItem(i))).isEqualTo(true);
         }
     }
 
@@ -269,12 +260,12 @@ public final class ArrayMapTest {
         }
 
         // Adding/removing keys shouldn't have triggered a resize
-        assertThat(numericMap.getCapacity(), equalTo(capactiy));
-        assertThat(numericMap.getSize(), equalTo(0));
+        assertThat(numericMap.getCapacity()).isEqualTo(capactiy);
+        assertThat(numericMap.getSize()).isEqualTo(0);
 
         // Checking the value of a key should loop around the whole table once, since the probing will keep encountering
         // dead spaces. The map should detect this and exit without running into an infinite loop.
-        assertThat(numericMap.containsKey(1), equalTo(false));
+        assertThat(numericMap.containsKey(1)).isEqualTo(false);
     }
 
     @Test
@@ -283,7 +274,7 @@ public final class ArrayMapTest {
         numericStringMap.put(1, "oone");
 
         numericStringMap.replace(1, "one");
-        assertThat(numericStringMap.get(1), equalTo("one"));
+        assertThat(numericStringMap.get(1)).isEqualTo("one");
 
         assertException("Can only replace key if it is already in the map", IllegalStateException.class,
             new Runnable() {
@@ -302,8 +293,8 @@ public final class ArrayMapTest {
         numericStringMap.putOrReplace(1, "one");
         numericStringMap.putOrReplace(2, "two");
 
-        assertThat(numericStringMap.get(1), equalTo("one"));
-        assertThat(numericStringMap.get(2), equalTo("two"));
+        assertThat(numericStringMap.get(1)).isEqualTo("one");
+        assertThat(numericStringMap.get(2)).isEqualTo("two");
     }
 
     @Test
@@ -314,7 +305,7 @@ public final class ArrayMapTest {
         numericStringMap.put(3, "three");
 
         final List<String> values = numericStringMap.getValues();
-        assertThat(values.size(), equalTo(3));
-        assertThat(values, contains("one", "two", "three"));
+        assertThat(values.size()).isEqualTo(3);
+        assertThat(values).containsExactly("one", "two", "three");
    }
 }

@@ -9,11 +9,11 @@ public final class ArgEvent<T extends EventArgs> {
 
     private final ArrayList<ArgEventListener<T>> listeners = new ArrayList<ArgEventListener<T>>();
 
-    public void addListener(final ArgEventListener<T> listener) {
+    public void addListener(ArgEventListener<T> listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(final ArgEventListener<T> listener) {
+    public void removeListener(ArgEventListener<T> listener) {
         listeners.remove(listener);
     }
 
@@ -22,7 +22,7 @@ public final class ArgEvent<T extends EventArgs> {
     /**
      * Fire this event, triggering all listeners.
      */
-    public void fire(final Object sender, final T args) {
+    public void fire(Object sender, T args) {
         int numListeners = listeners.size();
         for (int i = 0; i < numListeners; ++i) {
             ArgEventListener<T> listener = listeners.get(i);

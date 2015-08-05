@@ -17,14 +17,14 @@ public final class ReflectionUtils {
 
     private static class PrimitiveEqualityTester implements EqualityTester {
         @Override
-        public boolean areSame(final Object obj1, final Object obj2) {
+        public boolean areSame(Object obj1, Object obj2) {
             return obj1.equals(obj2);
         }
     }
 
     private static class DefaultEqualityTester implements EqualityTester {
         @Override
-        public boolean areSame(final Object obj1, final Object obj2) {
+        public boolean areSame(Object obj1, Object obj2) {
             try {
                 assertSame(obj1, obj2);
             } catch (IllegalStateException e) {
@@ -58,7 +58,7 @@ public final class ReflectionUtils {
         EQUALITY_TESTERS.put(Double.class, new PrimitiveEqualityTester());
     }
 
-    public static void registerEqualityTester(final Class classType, final EqualityTester equalityTester) {
+    public static void registerEqualityTester(Class classType, EqualityTester equalityTester) {
         EQUALITY_TESTERS.put(classType, equalityTester);
     }
 
@@ -70,7 +70,7 @@ public final class ReflectionUtils {
      *
      * @throws IllegalStateException if the target class has a field set to a non-default value.
      */
-    public static <T> void assertSame(final T obj1, final T obj2) {
+    public static <T> void assertSame(T obj1, T obj2) {
         depth++;
 
         if (depth > MAX_DEPTH) {
@@ -78,7 +78,7 @@ public final class ReflectionUtils {
         }
 
         Class classType = obj1.getClass();
-        final Field[] fields = classType.getDeclaredFields();
+        Field[] fields = classType.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             if (Modifier.isStatic(field.getModifiers())) {
@@ -86,8 +86,8 @@ public final class ReflectionUtils {
             }
             try {
                 field.setAccessible(true);
-                final Object value1 = field.get(obj1);
-                final Object value2 = field.get(obj2);
+                Object value1 = field.get(obj1);
+                Object value2 = field.get(obj2);
 
                 if (value1 == value2) {
                     continue; // Not only equal, but the same object!
@@ -109,7 +109,7 @@ public final class ReflectionUtils {
         depth--;
     }
 
-    private static EqualityTester getTester(final Class classType) {
+    private static EqualityTester getTester(Class classType) {
         if (!EQUALITY_TESTERS.containsKey(classType)) {
             return FALLBACK_TESTER;
         }

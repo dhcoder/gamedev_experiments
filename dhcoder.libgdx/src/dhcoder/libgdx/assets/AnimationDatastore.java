@@ -10,7 +10,7 @@ public final class AnimationDatastore extends AssetGroup<AnimationGroup> {
     /**
      * Convenience method to grab a tile out from a subgroup directly.
      */
-    public Animation get(final String group, final String name) {
+    public Animation get(String group, String name) {
         return get(group).get(name);
     }
 }

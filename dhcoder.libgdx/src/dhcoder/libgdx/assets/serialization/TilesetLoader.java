@@ -17,8 +17,8 @@ public final class TilesetLoader {
         public int tileHeight;
     }
 
-    public static void load(final Json json, final ImageDatastore images, final TilesetDatastore tilesets,
-        final String jsonPath) {
+    public static void load(Json json, ImageDatastore images, TilesetDatastore tilesets,
+                            String jsonPath) {
         TilesetData data = json.fromJson(TilesetData.class, Gdx.files.internal(jsonPath).readString());
 
         tilesets.add(jsonPath, new Tileset(images.get(data.imagePath), data.tileWidth, data.tileHeight));

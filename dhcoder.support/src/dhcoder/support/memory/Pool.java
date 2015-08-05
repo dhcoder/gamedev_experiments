@@ -1,6 +1,6 @@
 package dhcoder.support.memory;
 
-import dhcoder.support.opt.Opt;
+import dhcoder.support.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +28,11 @@ import static dhcoder.support.text.StringUtils.format;
  */
 public final class Pool<T> {
 
-    public static interface AllocateMethod<T> {
+    public interface AllocateMethod<T> {
         T run();
     }
 
-    public static interface ResetMethod<T> {
+    public interface ResetMethod<T> {
         void run(T item);
     }
 
@@ -47,21 +47,21 @@ public final class Pool<T> {
      */
     public static boolean RUN_SANITY_CHECKS = false;
 
-    public static <P extends Poolable> Pool<P> of(final Class<P> poolableClass) {
+    public static <P extends Poolable> Pool<P> of(Class<P> poolableClass) {
         return of(poolableClass, DEFAULT_CAPACITY);
     }
 
-    public static <P extends Poolable> Pool<P> of(final Class<P> poolableClass, final int capacity) {
-        return new Pool<P>(new AllocateMethod() {
+    public static <P extends Poolable> Pool<P> of(final Class<P> poolableClass, int capacity) {
+        return new Pool<P>(new AllocateMethod<P>() {
             ReflectionAllocator<P> reflectionAllocator = new ReflectionAllocator<P>(poolableClass);
 
-            public Object run() {
+            public P run() {
                 return reflectionAllocator.allocate();
             }
-        }, new ResetMethod() {
+        }, new ResetMethod<P>() {
             @Override
-            public void run(final Object item) {
-                ((Poolable)item).reset();
+            public void run(P item) {
+                item.reset();
             }
         }, capacity);
     }
@@ -70,16 +70,16 @@ public final class Pool<T> {
     private final ResetMethod<T> reset;
     private final Stack<T> freeItems;
     private final ArrayList<T> itemsInUse;
-    private final Opt<T> referenceObjectOpt = Opt.withNoValue();
+    @Nullable private T referenceObject;
     private boolean resizable;
     private int capacity;
     private int maxCapacity;
 
-    public Pool(final AllocateMethod<T> allocate, final ResetMethod<T> reset) {
+    public Pool(AllocateMethod<T> allocate, ResetMethod<T> reset) {
         this(allocate, reset, DEFAULT_CAPACITY);
     }
 
-    public Pool(final AllocateMethod<T> allocate, final ResetMethod<T> reset, final int capacity) {
+    public Pool(AllocateMethod<T> allocate, ResetMethod<T> reset, int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException(format("Invalid pool capacity: {0}", capacity));
         }
@@ -100,11 +100,11 @@ public final class Pool<T> {
         }
 
         if (RUN_SANITY_CHECKS) {
-            referenceObjectOpt.set(allocate.run()); // Allocate one extra object for reference
+            referenceObject = allocate.run(); // Allocate one extra object for reference
         }
     }
 
-    public Pool makeResizable(final int maxCapacity) {
+    public Pool makeResizable(int maxCapacity) {
         if (maxCapacity < capacity) {
             throw new IllegalArgumentException(
                 format("Can't set pool's max capacity {0} smaller than its current capactiy {1}", maxCapacity,
@@ -156,11 +156,11 @@ public final class Pool<T> {
         return itemsInUse.size();
     }
 
-    public void freeToMark(final int mark) {
+    public void freeToMark(int mark) {
         freeCount(itemsInUse.size() - mark);
     }
 
-    public void freeCount(final int count) {
+    public void freeCount(int count) {
         int indexToFree = itemsInUse.size() - 1;
         for (int i = count - 1; i >= 0; --i) {
             T item = itemsInUse.get(indexToFree);
@@ -174,21 +174,22 @@ public final class Pool<T> {
         freeCount(itemsInUse.size());
     }
 
-    public void free(final T item) {
+    public void free(T item) {
         swapToEndAndRemove(itemsInUse, item);
         returnItemToPool(item);
     }
 
-    public void free(final int itemIndex) {
+    public void free(int itemIndex) {
         T item = swapToEndAndRemove(itemsInUse, itemIndex);
         returnItemToPool(item);
     }
 
-    private void returnItemToPool(final T item) {
+    private void returnItemToPool(T item) {
         reset.run(item);
         freeItems.push(item);
         if (RUN_SANITY_CHECKS) {
-            assertSame(referenceObjectOpt.getValue(), item);
+            assert referenceObject != null;
+            assertSame(referenceObject, item);
         }
     }
 

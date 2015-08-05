@@ -17,7 +17,7 @@ public final class Tileset {
     private final int numRows;
     private final int numCols;
 
-    public Tileset(final Texture texture, final int tileWidth, final int tileHeight) {
+    public Tileset(Texture texture, int tileWidth, int tileHeight) {
         this.texture = texture;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
@@ -43,7 +43,7 @@ public final class Tileset {
         return tileHeight;
     }
 
-    public TextureRegion getTile(final int tileX, final int tileY) {
+    public TextureRegion getTile(int tileX, int tileY) {
         if (tileX >= numCols || tileY >= numRows) {
             throw new IllegalArgumentException(
                 format("Invalid tile coordinates {0}x{1} (tileset is {2}x{3})", tileX, tileY, numCols, numRows));
@@ -60,7 +60,7 @@ public final class Tileset {
         return tile;
     }
 
-    public TextureRegion getTile(final int tileIndex) {
+    public TextureRegion getTile(int tileIndex) {
         int tileX = tileIndex % numCols;
         int tileY = tileIndex / numCols;
         return getTile(tileX, tileY);

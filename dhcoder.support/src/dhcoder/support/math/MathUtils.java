@@ -4,7 +4,7 @@ import static dhcoder.support.text.StringUtils.format;
 
 public final class MathUtils {
 
-    public static int log2(final int value) {
+    public static int log2(int value) {
 
         if (value < 0) {
             throw new IllegalArgumentException(format("Log2 must take a value >= 1. Got: {0}", value));
@@ -23,19 +23,19 @@ public final class MathUtils {
         return log2;
     }
 
-    public static boolean isPowerOfTwo(final int value) {
+    public static boolean isPowerOfTwo(int value) {
         // See http://stackoverflow.com/a/19383296/1299302
         return (value & (value - 1)) == 0;
     }
 
-    public static int clamp(final int value, final int min, final int max) {
+    public static int clamp(int value, int min, int max) {
         if (min > max) {
             throw new IllegalArgumentException(format("Called clamp with min < max (min: {0}, max: {1})", min, max));
         }
         return Math.max(min, Math.min(max, value));
     }
 
-    public static float clamp(final float value, final float min, final float max) {
+    public static float clamp(float value, float min, float max) {
         if (min > max) {
             throw new IllegalArgumentException(format("Called clamp with min < max (min: {0}, max: {1})", min, max));
         }

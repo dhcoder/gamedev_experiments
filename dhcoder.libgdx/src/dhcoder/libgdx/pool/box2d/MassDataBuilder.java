@@ -8,7 +8,7 @@ import dhcoder.support.memory.Pool;
  */
 public final class MassDataBuilder {
 
-    public static Pool<MassData> build(final int capacity) {
+    public static Pool<MassData> build(int capacity) {
         return new Pool<MassData>(new Pool.AllocateMethod<MassData>() {
             @Override
             public MassData run() {
@@ -16,7 +16,7 @@ public final class MassDataBuilder {
             }
         }, new Pool.ResetMethod<MassData>() {
             @Override
-            public void run(final MassData massData) {
+            public void run(MassData massData) {
                 massData.mass = 0f;
                 massData.center.setZero();
                 massData.I = 0f;

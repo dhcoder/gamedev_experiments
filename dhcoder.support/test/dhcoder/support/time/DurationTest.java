@@ -57,7 +57,7 @@ public final class DurationTest {
         assertThat(duration.getMilliseconds(), equalTo(5f));
 
         Duration otherDuration = Duration.fromSeconds(6f);
-        duration.setFrom(otherDuration);
+        duration.set(otherDuration);
         assertThat(duration.getSeconds(), equalTo(6f));
 
         duration.setZero();

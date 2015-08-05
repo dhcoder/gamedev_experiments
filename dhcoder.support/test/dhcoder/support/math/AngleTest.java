@@ -27,7 +27,7 @@ public final class AngleTest {
         Angle angle = Angle.fromDegrees(0f);
         Angle otherAngle = Angle.fromDegrees(45f);
         assertThat(angle.getDegrees(), equalTo(0f));
-        angle.setFrom(otherAngle);
+        angle.set(otherAngle);
         assertThat(angle.getDegrees(), equalTo(45f));
     }
 

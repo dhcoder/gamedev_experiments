@@ -25,12 +25,12 @@ public final class SceneLoader {
         public int[] tiles;
     }
 
-    public static void load(final Json json, final TilesetDatastore tilesets, final SceneDatastore scenes,
-        final String jsonPath) {
+    public static void load(Json json, TilesetDatastore tilesets, SceneDatastore scenes,
+                            String jsonPath) {
 
-        final FileHandle fileHandle = Gdx.files.internal(jsonPath);
+        FileHandle fileHandle = Gdx.files.internal(jsonPath);
         SceneData sceneData = json.fromJson(SceneData.class, fileHandle.readString());
-        final String sceneName = fileHandle.nameWithoutExtension();
+        String sceneName = fileHandle.nameWithoutExtension();
 
         if ((sceneData.tiles.length % sceneData.numCols) != 0) {
             throw new SerialziationException(
@@ -45,7 +45,7 @@ public final class SceneLoader {
         for (int i = 0; i < sceneData.tiles.length; i++) {
             int tileIndex = sceneData.tiles[i];
             int[] tileCoords = sceneData.tilePalette[tileIndex];
-            final TextureRegion tile = tileset.getTile(tileCoords[0], tileCoords[1]);
+            TextureRegion tile = tileset.getTile(tileCoords[0], tileCoords[1]);
             scene.setTile(i, tile);
         }
         scenes.add(sceneName, scene);

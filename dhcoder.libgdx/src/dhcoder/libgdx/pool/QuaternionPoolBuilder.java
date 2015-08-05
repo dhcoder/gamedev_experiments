@@ -8,7 +8,7 @@ import dhcoder.support.memory.Pool;
  */
 public final class QuaternionPoolBuilder {
 
-    public static Pool<Quaternion> build(final int capacity) {
+    public static Pool<Quaternion> build(int capacity) {
         return new Pool<Quaternion>(new Pool.AllocateMethod<Quaternion>() {
             @Override
             public Quaternion run() {
@@ -16,7 +16,7 @@ public final class QuaternionPoolBuilder {
             }
         }, new Pool.ResetMethod<Quaternion>() {
             @Override
-            public void run(final Quaternion item) {
+            public void run(Quaternion item) {
                 item.idt();
             }
         }, capacity);

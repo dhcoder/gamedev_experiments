@@ -9,7 +9,7 @@ import dhcoder.support.memory.Pool;
  */
 public final class BodyDefBuilder {
 
-    public static Pool<BodyDef> build(final int capacity) {
+    public static Pool<BodyDef> build(int capacity) {
         return new Pool<BodyDef>(new Pool.AllocateMethod<BodyDef>() {
             @Override
             public BodyDef run() {
@@ -17,7 +17,7 @@ public final class BodyDefBuilder {
             }
         }, new Pool.ResetMethod<BodyDef>() {
             @Override
-            public void run(final BodyDef bodyDef) {
+            public void run(BodyDef bodyDef) {
                 bodyDef.type = BodyType.StaticBody;
                 bodyDef.position.setZero();
                 bodyDef.angle = 0f;

@@ -5,14 +5,15 @@ import dhcoder.support.memory.Poolable;
 import static dhcoder.support.text.StringUtils.format;
 
 /**
- * Special-case {@link Opt} for the int primitive type (to avoid the allocation that comes from auto-boxing Ints)
+ * A class which represents a {@code Nullable Integer} but without the allocation overhead that
+ * comes from auto-boxing Floats).
  */
 public final class OptInt implements Poolable {
 
     /**
      * Creates an Opt wrapper around a int value.
      */
-    public static OptInt of(final int value) {
+    public static OptInt of(int value) {
         return new OptInt(value);
     }
 
@@ -38,7 +39,7 @@ public final class OptInt implements Poolable {
      * <p/>
      * Use {@link #of(int)} instead.
      */
-    private OptInt(final int value) { set(value); }
+    private OptInt(int value) { set(value); }
 
     /**
      * Clears the value of this optional.
@@ -64,14 +65,14 @@ public final class OptInt implements Poolable {
     /**
      * Returns the current value of this optional or the specified default value if this optional has no value.
      */
-    public int getValueOr(final int defaultValue) {
+    public int getValueOr(int defaultValue) {
         return (hasValue ? value : defaultValue);
     }
 
     /**
      * Sets this optional to a new value.
      */
-    public void set(final int value) {
+    public void set(int value) {
         this.value = value;
         this.hasValue = true;
     }
@@ -80,7 +81,7 @@ public final class OptInt implements Poolable {
      * Set the value of this optional to the value held by another optional (or no value if the target optional is also
      * valueless).
      */
-    public void setFrom(final OptInt rhs) {
+    public void setFrom(OptInt rhs) {
         this.hasValue = rhs.hasValue;
         this.value = rhs.value;
     }
@@ -105,9 +106,8 @@ public final class OptInt implements Poolable {
         OptInt optInt = (OptInt)o;
 
         if (hasValue != optInt.hasValue) { return false; }
-        if (optInt.value != value) { return false; }
+        return optInt.value == value;
 
-        return true;
     }
 
     @Override

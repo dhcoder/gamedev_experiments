@@ -28,7 +28,7 @@ public class MyGdxApp extends ApplicationAdapter {
         mySpriteBatch.setProjectionMatrix(myCamera.combined);
         myLogo = new Texture(Gdx.files.internal("badlogic.jpg"));
         mySpriteBatch.setShader(new BasicShader("shaders/inverse").getProgram());
-
+        
         Gdx.input.setInputProcessor(new MyInputHandler());
     }
 
@@ -50,6 +50,7 @@ public class MyGdxApp extends ApplicationAdapter {
     }
 
     private void update(float deltaTime) {
+
         // YOUR CODE HERE
     }
 

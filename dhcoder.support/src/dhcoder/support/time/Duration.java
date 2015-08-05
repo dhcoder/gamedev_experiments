@@ -13,28 +13,28 @@ public final class Duration implements Poolable {
         return new Duration();
     }
 
-    public static Duration fromSeconds(final float secs) {
+    public static Duration fromSeconds(float secs) {
         Duration duration = new Duration();
         duration.setSeconds(secs);
         return duration;
     }
 
-    public static Duration fromMinutes(final float minutes) {
+    public static Duration fromMinutes(float minutes) {
         Duration duration = new Duration();
         duration.setMinutes(minutes);
         return duration;
     }
 
-    public static Duration fromMilliseconds(final float milliseconds) {
+    public static Duration fromMilliseconds(float milliseconds) {
         Duration duration = new Duration();
         duration.setMilliseconds(milliseconds);
         return duration;
     }
 
-    public static Duration from(final Duration duration) {
-        Duration clonsedDuration = new Duration();
-        clonsedDuration.setFrom(duration);
-        return clonsedDuration;
+    public static Duration from(Duration duration) {
+        Duration clonedDuration = new Duration();
+        clonedDuration.set(duration);
+        return clonedDuration;
     }
 
     private float seconds;
@@ -48,7 +48,7 @@ public final class Duration implements Poolable {
         return seconds;
     }
 
-    public Duration setSeconds(final float secs) {
+    public Duration setSeconds(float secs) {
         seconds = (secs > 0f) ? secs : 0f;
         return this;
     }
@@ -57,7 +57,7 @@ public final class Duration implements Poolable {
         return seconds / 60f;
     }
 
-    public Duration setMinutes(final float minutes) {
+    public Duration setMinutes(float minutes) {
         setSeconds(minutes * 60f);
         return this;
     }
@@ -66,52 +66,52 @@ public final class Duration implements Poolable {
         return seconds * 1000f;
     }
 
-    public Duration setMilliseconds(final float milliseconds) {
+    public Duration setMilliseconds(float milliseconds) {
         setSeconds(milliseconds / 1000f);
         return this;
     }
 
-    public Duration setFrom(final Duration duration) {
+    public Duration set(Duration duration) {
         setSeconds(duration.seconds);
         return this;
     }
 
-    public Duration addSeconds(final float secs) {
+    public Duration addSeconds(float secs) {
         setSeconds(getSeconds() + secs);
         return this;
     }
 
-    public Duration addMinutes(final float minutes) {
+    public Duration addMinutes(float minutes) {
         setMinutes(getMinutes() + minutes);
         return this;
     }
 
-    public Duration addMilliseconds(final float milliseconds) {
+    public Duration addMilliseconds(float milliseconds) {
         setMilliseconds(getMilliseconds() + milliseconds);
         return this;
     }
 
-    public Duration add(final Duration duration) {
+    public Duration add(Duration duration) {
         setSeconds(getSeconds() + duration.getSeconds());
         return this;
     }
 
-    public Duration subtractSeconds(final float secs) {
+    public Duration subtractSeconds(float secs) {
         setSeconds(getSeconds() - secs);
         return this;
     }
 
-    public Duration subtractMinutes(final float minutes) {
+    public Duration subtractMinutes(float minutes) {
         setMinutes(getMinutes() - minutes);
         return this;
     }
 
-    public Duration subtractMilliseconds(final float milliseconds) {
+    public Duration subtractMilliseconds(float milliseconds) {
         setMilliseconds(getMilliseconds() - milliseconds);
         return this;
     }
 
-    public Duration subtract(final Duration duration) {
+    public Duration subtract(Duration duration) {
         setSeconds(getSeconds() - duration.getSeconds());
         return this;
     }

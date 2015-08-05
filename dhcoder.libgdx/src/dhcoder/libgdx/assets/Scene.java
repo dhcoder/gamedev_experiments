@@ -24,8 +24,8 @@ public final class Scene implements Renderable {
     private final Vector2 offset = new Vector2();
     private boolean ranSanityChecks;
 
-    public Scene(final Tileset tileset, final int numCols, final int numRows, final float offsetX,
-        final float offsetY) {
+    public Scene(Tileset tileset, int numCols, int numRows, float offsetX,
+                 float offsetY) {
         this.tileset = tileset;
         this.numCols = numCols;
         this.numRows = numRows;
@@ -67,7 +67,7 @@ public final class Scene implements Renderable {
         return getBottomY() + getHeight();
     }
 
-    public void setTile(final int tileX, final int tileY, final TextureRegion tile) {
+    public void setTile(int tileX, int tileY, TextureRegion tile) {
         if (tileX >= numCols || tileY >= numRows) {
             throw new IllegalArgumentException(
                 format("Invalid tile coordinates {0}x{1} (scene is {2}x{3})", tileX, tileY, numCols, numRows));
@@ -79,14 +79,14 @@ public final class Scene implements Renderable {
         ranSanityChecks = false;
     }
 
-    public void setTile(final int tileIndex, final TextureRegion tile) {
+    public void setTile(int tileIndex, TextureRegion tile) {
         int tileX = tileIndex % numCols;
         int tileY = tileIndex / numCols;
         setTile(tileX, tileY, tile);
     }
 
     @Override
-    public void render(final Batch batch) {
+    public void render(Batch batch) {
         if (RUN_SANITY_CHECKS && !ranSanityChecks) {
             ContractUtils.requireElements(groundTiles, "All scene tiles must be set");
             ranSanityChecks = true;

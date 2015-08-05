@@ -9,7 +9,7 @@ import dhcoder.support.memory.Poolable;
  * <p/>
  * For readability, you may want to inherit from this class, as follows:
  * <p/>
- * {@code private final class MyKey extends Key2<SomeClass, AnotherClass> { ... thin constructors ... }}
+ * {@code private final class MyKey extends Key2<SomeClass, AnotherClass> { ... constructors ... }}
  * <p/>
  * Important: This class provides {@link #reset()} and {@link #set(Object, Object)} methods, but this is only for being
  * able to pool keys. You absolutely should not modify a key while its in use in a Map somewhere!
@@ -20,12 +20,12 @@ public class Key2<T1, T2> implements Poolable {
 
     public Key2() {}
 
-    public Key2(final T1 value1, final T2 value2) {
+    public Key2(T1 value1, T2 value2) {
         this.value1 = value1;
         this.value2 = value2;
     }
 
-    public final Key2 set(final T1 value1, final T2 value2) {
+    public final Key2 set(T1 value1, T2 value2) {
         this.value1 = value1;
         this.value2 = value2;
         return this;
@@ -39,7 +39,7 @@ public class Key2<T1, T2> implements Poolable {
     }
 
     @Override
-    public final boolean equals(final Object o) {
+    public final boolean equals(Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 

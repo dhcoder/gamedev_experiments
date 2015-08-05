@@ -9,11 +9,11 @@ public abstract class AssetGroup<T> {
 
     ArrayMap<String, T> assets = new ArrayMap<String, T>();
 
-    public void add(final String name, final T asset) {
+    public void add(String name, T asset) {
         assets.put(name, asset);
     }
 
-    public T get(final String name) {
+    public T get(String name) {
         return assets.get(name);
     }
 }

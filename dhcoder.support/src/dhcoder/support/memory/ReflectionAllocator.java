@@ -9,7 +9,7 @@ import static dhcoder.support.text.StringUtils.format;
 * A class which can allocate any target class by reflection as long as that target class has a null constructor.
 */
 public final class ReflectionAllocator<T> {
-    private static IllegalArgumentException newConstructionException(final Class<?> targetClass) {
+    private static IllegalArgumentException newConstructionException(Class<?> targetClass) {
         return new IllegalArgumentException(
             format("Class type {0} must have an empty constructor and be instantiable", targetClass));
     }
@@ -17,7 +17,7 @@ public final class ReflectionAllocator<T> {
     private final Class<T> targetClass;
     private final Constructor<T> constructor;
 
-    public ReflectionAllocator(final Class<T> targetClass) {
+    public ReflectionAllocator(Class<T> targetClass) {
         this.targetClass = targetClass;
         try {
             constructor = targetClass.getDeclaredConstructor();

@@ -11,7 +11,7 @@ public final class ListUtils {
      *
      * @throws IllegalArgumentException if the specified item is not in the list.
      */
-    public static <T> void swapToEndAndRemove(final List<T> list, final T item) {
+    public static <T> void swapToEndAndRemove(List<T> list, T item) {
         int itemIndex = -1;
         int listSize = list.size();
         for (int i = 0; i < listSize; ++i) {
@@ -27,8 +27,8 @@ public final class ListUtils {
     /**
      * Like {@link #swapToEndAndRemove(List, Object)} but where the list index is known.
      */
-    public static <T> T swapToEndAndRemove(final List<T> list, final int itemIndex) {
-        final int listSize = list.size();
+    public static <T> T swapToEndAndRemove(List<T> list, int itemIndex) {
+        int listSize = list.size();
         if (itemIndex < 0 || itemIndex >= listSize) {
             throw new IllegalArgumentException("Trying to remove an item that's not in the list");
         }
