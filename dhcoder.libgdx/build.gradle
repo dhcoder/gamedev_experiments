@@ -21,6 +21,7 @@ dependencies {
     testCompile "dhcoder:dhcoder.test:+"
     testCompile 'junit:junit:4.+'
     testCompile 'com.google.truth:truth:+'
+    testCompile "com.badlogicgames.gdx:gdx-box2d-platform:+:natives-desktop"
 }
 
 sourceSets.main.java.srcDirs = ["src/"]

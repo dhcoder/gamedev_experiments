@@ -27,11 +27,11 @@ public final class HeapPool<T> {
     private final ArrayMap<T, Integer> itemIndices;
 
     public HeapPool(Pool.AllocateMethod<T> allocate, Pool.ResetMethod<T> reset) {
-        this(new Pool(allocate, reset));
+        this(new Pool<T>(allocate, reset));
     }
 
     public HeapPool(Pool.AllocateMethod<T> allocate, Pool.ResetMethod<T> reset, int capacity) {
-        this(new Pool(allocate, reset, capacity));
+        this(new Pool<T>(allocate, reset, capacity));
     }
 
     private HeapPool(Pool<T> innerPool) {
@@ -61,7 +61,7 @@ public final class HeapPool<T> {
     }
 
     public void free(T item) {
-        int index = itemIndices.get(item).intValue();
+        int index = itemIndices.get(item);
         innerPool.free(index);
 
         itemIndices.remove(item);
