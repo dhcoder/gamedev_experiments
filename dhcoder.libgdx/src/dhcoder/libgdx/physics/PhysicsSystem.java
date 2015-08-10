@@ -90,6 +90,14 @@ public final class PhysicsSystem {
     public void setActive(Body body, boolean active) {
         if (active) {
             if (myInactiveBodies.removeIf(body)) {
+                List<ActiveCollision> activeCollisions = myActiveCollisionsPool.getItemsInUse();
+                int numCollisions = activeCollisions.size();
+                for (int i = 0; i < numCollisions; i++) {
+                    ActiveCollision activeCollision = activeCollisions.get(i);
+                    if (activeCollision.ownsBody(body)) {
+                        activeCollision.myJustCollided = true;
+                    }
+                }
                 runCollisionHandlers(body, onCollidedDispatcher);
             }
 
@@ -97,15 +105,6 @@ public final class PhysicsSystem {
         else {
             if (myInactiveBodies.putIf(body)) {
                 runCollisionHandlers(body, onSeparatedDispatcher);
-
-                List<ActiveCollision> activeCollisions = myActiveCollisionsPool.getItemsInUse();
-                int numCollisions = activeCollisions.size();
-                for (int i = 0; i < numCollisions; i++) {
-                    ActiveCollision activeCollision = activeCollisions.get(i);
-                    if (activeCollision.ownsBody(body)) {
-                        activeCollision.myJustCollided = true; // In case we become active again while still colliding
-                    }
-                }
             }
         }
     }
@@ -127,7 +126,7 @@ public final class PhysicsSystem {
 
         // Variable time step is not recommended, but we'll be careful... We can change this later if it causes
         // trouble, but otherwise, it would be nice to have 1:1 entity::update and physics::update steps.
-        myWorld.step(elapsedTime.getSeconds(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+        myWorld.step(elapsedTime.getMilliseconds(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
         List<ActiveCollision> activeCollisions = myActiveCollisionsPool.getItemsInUse();
         int numCollisions = activeCollisions.size();
@@ -140,9 +139,24 @@ public final class PhysicsSystem {
                 continue;
             }
 
-            runCollisionHandlers(fixtureA, fixtureB,
-                activeCollision.myJustCollided ? onCollidedDispatcher : onOverlappingDispatcher);
-            activeCollision.myJustCollided = false;
+            if (activeCollision.myJustSeparated) {
+                runCollisionHandlers(fixtureA, fixtureB, onSeparatedDispatcher);
+            }
+            else {
+                runCollisionHandlers(fixtureA, fixtureB,
+                    activeCollision.myJustCollided ? onCollidedDispatcher : onOverlappingDispatcher);
+                activeCollision.myJustCollided = false;
+            }
+        }
+
+        for (int i = 0; i < numCollisions; i++) {
+            ActiveCollision activeCollision = activeCollisions.get(i);
+
+            if (activeCollision.myJustSeparated) {
+                freeActiveCollision(activeCollision);
+                --i;
+                --numCollisions;
+            }
         }
 
         for (int i = 0; i < myPhysicsListeners.size; i++) {
@@ -151,14 +165,14 @@ public final class PhysicsSystem {
         }
     }
 
-    public void debugRender(Matrix4 cameraMatrix, float pixelsToMeters) {
+    public void debugRender(Matrix4 cameraMatrix, float metersToPixels) {
         if (myDebugRenderer == null) {
             myDebugRenderer = new Box2DDebugRenderer();
             myDebugRenderMatrix = new Matrix4();
         }
 
         assert myDebugRenderMatrix != null; // set non-null w/ myDebugRenderer
-        myDebugRenderMatrix.set(cameraMatrix).scl(pixelsToMeters);
+        myDebugRenderMatrix.set(cameraMatrix).scl(metersToPixels);
         myDebugRenderer.render(myWorld, myDebugRenderMatrix);
     }
 
@@ -182,18 +196,6 @@ public final class PhysicsSystem {
         body.getWorld().destroyBody(body);
     }
 
-    private void removeActiveCollision(Fixture fixtureA, Fixture fixtureB) {
-        List<ActiveCollision> collisions = myActiveCollisionsPool.getItemsInUse();
-        int numCollisions = collisions.size();
-        for (int i = 0; i < numCollisions; i++) {
-            ActiveCollision activeCollision = collisions.get(i);
-            if (activeCollision.matches(fixtureA, fixtureB)) {
-                freeActiveCollision(activeCollision);
-                break;
-            }
-        }
-    }
-
     private void removeActiveCollisions(Body body) {
         List<ActiveCollision> collisions = myActiveCollisionsPool.getItemsInUse();
         int numCollisions = collisions.size();
@@ -201,8 +203,8 @@ public final class PhysicsSystem {
             ActiveCollision activeCollision = collisions.get(i);
             if (activeCollision.ownsBody(body)) {
                 freeActiveCollision(activeCollision);
-                i--;
-                numCollisions--;
+                --i;
+                --numCollisions;
             }
         }
     }
@@ -210,9 +212,9 @@ public final class PhysicsSystem {
     private void freeActiveCollision(ActiveCollision activeCollision) {
         Fixture fixtureA = activeCollision.myFixtureA;
         Fixture fixtureB = activeCollision.myFixtureB;
-        myActiveCollisionsPool.free(activeCollision);
-
         runCollisionHandlers(fixtureA, fixtureB, onSeparatedDispatcher);
+
+        myActiveCollisionsPool.free(activeCollision);
     }
 
     private boolean hasCollisionHandlers(Contact contact) {
@@ -305,6 +307,7 @@ public final class PhysicsSystem {
         public Fixture myFixtureA;
         public Fixture myFixtureB;
         public boolean myJustCollided = true;
+        public boolean myJustSeparated;
 
         public boolean matches(Fixture fixtureC, Fixture fixtureD) {
             return ((myFixtureA == fixtureC && myFixtureB == fixtureD) || (myFixtureA == fixtureD && myFixtureB ==
@@ -320,6 +323,7 @@ public final class PhysicsSystem {
             myFixtureA = null;
             myFixtureB = null;
             myJustCollided = true;
+            myJustSeparated = false;
         }
     }
 
@@ -358,7 +362,16 @@ public final class PhysicsSystem {
             if (hasCollisionHandlers(contact)) {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
-                removeActiveCollision(fixtureA, fixtureB);
+
+                List<ActiveCollision> collisions = myActiveCollisionsPool.getItemsInUse();
+                int numCollisions = collisions.size();
+                for (int i = 0; i < numCollisions; i++) {
+                    ActiveCollision activeCollision = collisions.get(i);
+                    if (activeCollision.matches(fixtureA, fixtureB)) {
+                        activeCollision.myJustSeparated = true;
+                        break;
+                    }
+                }
             }
         }
 
