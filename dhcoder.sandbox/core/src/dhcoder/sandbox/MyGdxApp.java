@@ -10,10 +10,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import dhcoder.support.time.Duration;
 
 public class MyGdxApp extends ApplicationAdapter {
 
     public static final String TAG = "SANDBOX";
+
+    // When you hit a breakpoint while debugging an app, or if the phone you're using is just simply being slow, the
+    // delta times between frames can be HUGE. Let's clamp to a reasonable max here. This also prevents physics update
+    // logic from dealing with time steps that are too large (at which point, objects start going through walls, etc.)
+    private static final float MAX_DELTA_TIME_SECS = 1f / 30f;
+
+    private final Duration myElapsedTime = Duration.zero();
     private Camera myCamera;
     private ShapeRenderer myShapeRenderer;
     private SpriteBatch mySpriteBatch;
@@ -34,7 +42,8 @@ public class MyGdxApp extends ApplicationAdapter {
 
     @Override
     public void render() {
-        update(Gdx.graphics.getRawDeltaTime());
+        myElapsedTime.setSeconds(Math.min(Gdx.graphics.getRawDeltaTime(), MAX_DELTA_TIME_SECS));
+        update(myElapsedTime);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -49,8 +58,7 @@ public class MyGdxApp extends ApplicationAdapter {
         mySpriteBatch.end();
     }
 
-    private void update(float deltaTime) {
-
+    private void update(Duration duration) {
         // YOUR CODE HERE
     }
 
