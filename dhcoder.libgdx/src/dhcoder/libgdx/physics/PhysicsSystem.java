@@ -63,6 +63,7 @@ public final class PhysicsSystem {
     private final Pool<CollisionCallbackData> myCollisionDataPool = Pool.of(CollisionCallbackData.class, 4);
     @Nullable private Box2DDebugRenderer myDebugRenderer;
     @Nullable private Matrix4 myDebugRenderMatrix;
+    private boolean myIsUpdating;
 
     public PhysicsSystem(int capacity, Vector2 gravity) {
         myWorld = new World(gravity, true);
@@ -123,6 +124,7 @@ public final class PhysicsSystem {
     }
 
     public void update(Duration elapsedTime) {
+        myIsUpdating = true;
 
         // Variable time step is not recommended, but we'll be careful... We can change this later if it causes
         // trouble, but otherwise, it would be nice to have 1:1 entity::update and physics::update steps.
@@ -159,6 +161,8 @@ public final class PhysicsSystem {
             }
         }
 
+        myIsUpdating = false;
+
         for (int i = 0; i < myPhysicsListeners.size; i++) {
             PhysicsListener physicsListener = myPhysicsListeners.get(i);
             physicsListener.onUpdated();
@@ -190,8 +194,12 @@ public final class PhysicsSystem {
      * @see <a href="https://code.google.com/p/libgdx/issues/detail?id=484">Issue: LibGdx body listener</a>
      */
     public void destroyBody(@NotNull Body body) {
-        setActive(body, false); // This forces active collisions to separate
-        myInactiveBodies.remove(body); // setActive puts a body reference in myInactiveBodies - remove it!
+        if (myIsUpdating) {
+            // TODO: Enqueue this destroy call internally instead
+            throw new IllegalStateException("Can't call destroyBody while mid-update");
+        }
+
+        myInactiveBodies.removeIf(body);
         removeActiveCollisions(body);
         body.getWorld().destroyBody(body);
     }
