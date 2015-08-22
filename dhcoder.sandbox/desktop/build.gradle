@@ -30,9 +30,9 @@ task run(dependsOn: classes, type: JavaExec) {
 
 dependencies {
     compile project(':dhcoder.sandbox:core')
-    compile "com.badlogicgames.gdx:gdx-backend-lwjgl:+"
-    compile "com.badlogicgames.gdx:gdx-platform:+:natives-desktop"
-    compile "com.badlogicgames.gdx:gdx-box2d-platform:+:natives-desktop"
+    compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

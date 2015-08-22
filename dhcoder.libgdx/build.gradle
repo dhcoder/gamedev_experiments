@@ -16,12 +16,12 @@ repositories {
 
 dependencies {
     compile "dhcoder:dhcoder.support:+"
-    compile 'com.badlogicgames.gdx:gdx:+'
-    compile 'com.badlogicgames.gdx:gdx-box2d:+'
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     testCompile "dhcoder:dhcoder.test:+"
     testCompile 'junit:junit:4.+'
     testCompile 'com.google.truth:truth:+'
-    testCompile "com.badlogicgames.gdx:gdx-box2d-platform:+:natives-desktop"
+    testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 }
 
 sourceSets.main.java.srcDirs = ["src/"]

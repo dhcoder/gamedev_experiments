@@ -1,5 +1,5 @@
-//apply plugin: 'idea'
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 22
@@ -16,20 +16,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 configurations { natives }
 
 dependencies {
     compile project(":dhcoder.sandbox:core")
-    compile "com.badlogicgames.gdx:gdx-backend-android:+"
-    natives "com.badlogicgames.gdx:gdx-platform:+:natives-armeabi"
-    natives "com.badlogicgames.gdx:gdx-platform:+:natives-armeabi-v7a"
-    natives "com.badlogicgames.gdx:gdx-platform:+:natives-x86"
-    compile "com.badlogicgames.gdx:gdx-box2d:+"
-    natives "com.badlogicgames.gdx:gdx-box2d-platform:+:natives-armeabi"
-    natives "com.badlogicgames.gdx:gdx-box2d-platform:+:natives-armeabi-v7a"
-    natives "com.badlogicgames.gdx:gdx-box2d-platform:+:natives-x86"
+    compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
+    natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
+    natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
 
 }
 
