@@ -4,6 +4,7 @@ apply plugin: 'kotlin'
 sourceCompatibility = 1.7
 
 dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile "dhcoder:dhcoder.support:+"
